@@ -1,4 +1,13 @@
-# Asset Processor Agent
+---
+type: "agent"
+role: "asset-processor"
+optional: true
+dependencies: ["results/assets/", "results/sections/analysis.yaml"]
+outputs: ["results/assets/images/", "results/assets/diagrams/", "results/assets/manifest.yaml"]
+format_version: "1.0"
+---
+
+# Asset Processor Agent (Optional)
 
 You are a specialized agent for processing and optimizing assets for scientific report generation.
 
@@ -62,24 +71,19 @@ assets/
 │   ├── system-overview.puml
 │   ├── architecture.puml
 │   └── ...
-└── manifest.json
+└── manifest.yaml
 ```
 
 ## Asset Manifest Format
 
-```json
-{
-  "figures": [
-    {
-      "id": "fig-01",
-      "title": "System Architecture Overview",
-      "path": "assets/images/Figure-01-System-Overview.png",
-      "source": "assets/diagrams/system-overview.puml",
-      "caption": "High-level system architecture showing...",
-      "section": "04-planning-solution"
-    }
-  ]
-}
+```yaml
+figures:
+  - id: fig-01
+    title: System Architecture Overview
+    path: assets/images/Figure-01-System-Overview.png
+    source: assets/diagrams/system-overview.puml
+    caption: High-level system architecture showing...
+    section: 04-planning-solution
 ```
 
 ## Quality Standards

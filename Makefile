@@ -13,28 +13,18 @@ all: analyze synthesize validate  ## Perform full scientific report generation p
 
 analyze: create_struct  ## Analyze the target repository (Phase 1)
 	echo "Starting Repository Analysis..."
-	claude task --agent general-purpose --file .claude/agents/repo-analyzer.md
+	cat .claude/agents/repo-analyzer.md | claude -p "execute"
 	echo "Repository Analysis completed."
 
 synthesize: analyze  ## Synthesize sections into report (Phase 2)
 	echo "Starting Section Synthesis..."
-	claude task --agent general-purpose --file .claude/agents/section-synthesizer.md
+	cat .claude/agents/section-synthesizer.md | claude -p "execute"
 	echo "Section Synthesis completed."
 
 validate: synthesize  ## Validate synthesized content against analysis (Phase 3)
 	echo "Starting Content Validation..."
-	claude task --agent general-purpose --file .claude/agents/validator.md
+	cat .claude/agents/validator.md | claude -p "execute"
 	echo "Content Validation completed."
-
-assets:  ## Process assets and diagrams
-	echo "Processing Assets..."
-	claude task --agent general-purpose --file .claude/agents/asset-processor.md
-	echo "Asset Processing completed."
-
-bibliography:  ## Generate bibliography and citations
-	echo "Generating Bibliography..."
-	claude task --agent general-purpose --file .claude/agents/bibliography-curator.md
-	echo "Bibliography Generation completed."
 
 create_struct:  ## Setup directory structure
 	echo "Creating directory structure..."

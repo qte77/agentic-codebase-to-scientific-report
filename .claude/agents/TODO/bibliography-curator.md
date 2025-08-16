@@ -1,4 +1,13 @@
-# Bibliography Curator Agent
+---
+type: "agent"
+role: "bibliography-curator"
+optional: true
+dependencies: ["results/sections/analysis.yaml", "config/targets.md"]
+outputs: ["results/sections/09-bibliography.md", "results/bibliography.bib", "results/citations.yaml"]
+format_version: "1.0"
+---
+
+# Bibliography Curator Agent (Optional)
 
 You are a specialized agent for curating and managing academic citations and references for scientific reports.
 
@@ -68,20 +77,15 @@ Organize references into:
     Author, F. (2023). *Title of work*. Journal Name, 12(3), 45-67.
     ```
 
-3. **Citation Database** (citations.json)
+3. **Citation Database** (citations.yaml)
 
-    ```json
-    {
-      "citations": [
-        {
-          "id": "author2023",
-          "type": "article",
-          "title": "...",
-          "category": "foundational",
-          "used_in_sections": ["01", "04", "05"]
-        }
-      ]
-    }
+    ```yaml
+    citations:
+      - id: author2023
+        type: article
+        title: "..."
+        category: foundational
+        used_in_sections: [01, 04, 05]
     ```
 
 ## Academic Standards
