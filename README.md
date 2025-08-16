@@ -1,1 +1,1 @@
-"# agentic-codebase-to-scientific-report" 
+# Agentic Codebase to Scientific Report Generator
