@@ -1,40 +1,109 @@
 # Agentic Codebase to Scientific Report Generator Pipeline
-# Sequential execution with dependency management
 
 .SILENT:
 .ONESHELL:
 .PHONY: all analyze synthesize validate create_struct clean_struct setup_claude_code help
 .DEFAULT_GOAL := help
 
-all: analyze synthesize validate  ## Perfom full process
 
-analyze:  ## Analyze the target repo (Phase 1)
-	# TODO
-	echo "Not implemented"
+# MARK: Report
 
-synthesize:  ## Synthesize into report (Phase 2)
-	# TODO
-	echo "Not implemented"
 
-validate:  ## Validate the synthezied content against analysis (Phase 3)
-	# TODO
-	echo "Not implemented"
+all: analyze synthesize validate  ## Perform full scientific report generation process
+
+analyze: create_struct  ## Analyze the target repository (Phase 1)
+	echo "Starting Repository Analysis..."
+	claude task --agent general-purpose --file .claude/agents/repo-analyzer.md
+	echo "Repository Analysis completed."
+
+synthesize: analyze  ## Synthesize sections into report (Phase 2)
+	echo "Starting Section Synthesis..."
+	claude task --agent general-purpose --file .claude/agents/section-synthesizer.md
+	echo "Section Synthesis completed."
+
+validate: synthesize  ## Validate synthesized content against analysis (Phase 3)
+	echo "Starting Content Validation..."
+	claude task --agent general-purpose --file .claude/agents/validator.md
+	echo "Content Validation completed."
+
+assets:  ## Process assets and diagrams
+	echo "Processing Assets..."
+	claude task --agent general-purpose --file .claude/agents/asset-processor.md
+	echo "Asset Processing completed."
+
+bibliography:  ## Generate bibliography and citations
+	echo "Generating Bibliography..."
+	claude task --agent general-purpose --file .claude/agents/bibliography-curator.md
+	echo "Bibliography Generation completed."
 
 create_struct:  ## Setup directory structure
 	echo "Creating directory structure..."
-	mkdir -p results/research results/gtm
+	mkdir -p config results/sections results/assets/images results/assets/diagrams
 
 clean_struct:  ## Clean directory structure
 	echo "Cleaning generated outputs..."
-	rm -rf results/research results/gtm
+	rm -rf results/
+
+
+# MARK:agents, LLMs
+
 
 setup_claude_code:  ## Setup claude code CLI, node.js and npm have to be present
 	echo "Setting up Claude Code CLI ..."
 	npm install -gs @anthropic-ai/claude-code
 	echo "Claude Code CLI version: $$(claude --version)"
 
+
+# MARK: PlantUML
+
+
+setup_plantuml:  ## Setup PlantUML with docker, $(PLANTUML_SCRIPT) and $(PLANTUML_CONTAINER)
+	echo "Setting up PlantUML docker ..."
+	chmod +x $(PLANTUML_SCRIPT)
+	docker pull $(PLANTUML_CONTAINER)
+	echo "PlantUML docker version: $$(docker run --rm $(PLANTUML_CONTAINER) --version)"
+
+run_puml_interactive:  ## Generate a themed diagram from a PlantUML file interactively.
+	# https://github.com/plantuml/plantuml-server
+	# plantuml/plantuml-server:tomcat
+	docker run -d -p 8080:8080 "$(PLANTUML_CONTAINER)"
+
+run_puml_single:  ## Generate a themed diagram from a PlantUML file.
+	$(PLANTUML_SCRIPT) "$(INPUT_FILE)" "$(STYLE)" "$(OUTPUT_PATH)" \
+		"$(CHECK_ONLY)" "$(PLANTUML_CONTAINER)"
+
+
+# MARK: PDF converter
+
+
+setup_pdf_converter:  ## Setup PDF converter tools: pandoc, wkhtmltopdf
+	converter_choice=$(firstword $(strip $(ARGS)))
+	converter_supported="Use 'pandoc' or 'wkhtmltopdf'."
+	usage="--- Usage ---\nCombine files: cat file1.md file2.md file3.md > combined.md\nConvert files: "
+	if [ -z "$${converter_choice}" ]; then
+		echo "No PDF converter specified. $${converter_supported}"
+		exit 1
+	fi
+	echo "Setting up PDF converter '$${converter_choice}' ..."
+	sudo apt-get update -yqq
+	if [ "$${converter_choice}" = "pandoc" ]; then
+		sudo apt-get install -yqq pandoc
+		sudo apt-get install -yqq texlive-latex-recommended texlive-fonts-recommended
+		pandoc --version | head -n 1
+		echo "$${usage} pandoc combined.md -o output.pdf"
+	elif [ "$${converter_choice}" = "wkhtmltopdf" ]; then
+		sudo apt-get install -yqq wkhtmltopdf
+		echo "$${usage} markdown your_document.md & wkhtmltopdf - output.pdf"
+	else
+		echo "Error: Unsupported PDF converter choice '$${converter_choice}'. $${converter_supported}"
+		exit 1
+	fi
+
+
+# MARK: help
+
+
 help:  ## Displays this message with available recipes
-	# TODO add stackoverflow source
 	echo "Usage: make [recipe]"
 	echo "Recipes:"
 	awk '/^[a-zA-Z0-9_-]+:.*?##/ {
