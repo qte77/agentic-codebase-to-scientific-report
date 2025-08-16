@@ -1,6 +1,7 @@
+<!-- markdownlint-disable MD033 no-inline-html -->
 # Agentic Scientific Report Generator
 
-> Stop Guessing. Start Documenting. - Automated framework for generating comprehensive scientific reports from GitHub repositories using AI-driven analysis and academic writing standards.
+> Stop Guessing. Start Documenting. Transform Code Into human-readable Knowledge. - Automated framework for generating comprehensive scientific reports from code repositories using AI-driven analysis and academic writing standards.
 
 ## Purpose
 
@@ -17,36 +18,46 @@ Edit the configuration files in `config/`:
 3. **`comments_analysis.md`** - Set analysis constraints and priorities
 4. **`comments_synthesis.md`** - Configure writing style and formatting
 
+**For detailed configuration instructions, examples, and templates, see [`config/README.md`](config/README.md)**
+
 ### Execution Methods
 
-#### Automated Pipeline (Recommended)
+| Method | Command | Description | Use Case |
+|--------|---------|-------------|----------|
+| **Automated complete Pipeline** | `make all` | Full 3-phase pipeline with dependencies | Recommended for most users |
+| **Agentic non-interactive Workflow** | `claude -p "Read and execute the workflow described in AGENTS.md"` | Claude orchestrates sub-agents | Advanced workflow with error handling |
+| **Individual Phases** | `make analyze && make synthesize && make validate` | Run specific phases independently | Resume from failure or selective processing |
+| **Manual Tasks** | `cat .claude/agents/repo-analyzer.md \| claude -p "execute"`<br>`cat .claude/agents/section-synthesizer.md \| claude -p "execute"`<br>`cat .claude/agents/validator.md \| claude -p "execute"` | Direct agent execution | Debugging or custom workflows |
+| **Setup & Utilities** | `make create_struct && make clean_struct && make setup_claude_code`<br>`make setup_plantuml && make setup_pdf_converter` | Environment preparation | Initial setup and maintenance |
 
-Uses Claude Code CLI for streamlined execution:
+**Prerequisites for all methods:**
 
-```bash
-# Complete report generation
-make all
-```
+- Repository URL configured in `config/sources.md`
+- Claude Code CLI installed (`make setup_claude_code`)
+- Output directories exist (`make create_struct`)
 
-#### Make-based Execution  
+#### Method Comparison
 
-Granular control via Makefile targets:
+**Automated complete Pipeline (`make all`):**
 
-```bash
-make analyze      # Repository analysis phase
-make synthesize   # Section generation phase
-make validate     # Quality validation phase
-```
+- Dependency management and sequential execution
+- Automatic error handling and resume capability
+- Progress tracking and status updates
+- Best for: Production use and reliable automation
 
-#### Manual Execution
+**Agentic non-interactive Workflow (`claude -p ...`):**
 
-Direct Claude Code task execution:
+- Intelligent sub-agent coordination
+- Dynamic error recovery and adaptation
+- Context-aware decision making
+- Best for: Complex repositories requiring adaptive analysis
 
-```bash
-claude task --agent general-purpose --file .claude/agents/repo-analyzer.md
-claude task --agent general-purpose --file .claude/agents/section-synthesizer.md
-claude task --agent general-purpose --file .claude/agents/validator.md
-```
+**Individual Phases (`make analyze/synthesize/validate`):**
+
+- Granular control and selective processing
+- Easy debugging and development iteration
+- Resource optimization for partial runs
+- Best for: Development, testing, and troubleshooting
 
 ## Automated Features
 
@@ -59,25 +70,52 @@ claude task --agent general-purpose --file .claude/agents/validator.md
 
 ## Expected Outcomes
 
-### Generated Report Sections
+The system generates comprehensive scientific documentation with multiple deliverable formats:
 
-1. **Title & Abstract** - Project overview and contributions summary
-2. **Introduction** - Background, literature review, and comparative analysis
-3. **Project Introduction** - Current state and technical context
-4. **Desired State** - Goals, vision, and success criteria
-5. **Planning & Solution** - Architecture, technology stack, and design decisions
-6. **Implementation** - Core functionality, algorithms, and code examples
-7. **Control of Success** - Acceptance criteria and validation metrics
-8. **Results** - Outcomes, evaluation data, and gap analysis
-9. **Summary & Outlook** - Conclusions and future roadmap
-10. **Bibliography** - Academic citations and technical references
+### Primary Deliverables
 
-### Output Format
+**Academic Report Sections**  
 
-- **Academic Standard**: IEEE/ACM publication formatting
-- **Markdown Sections**: Individual files ready for pandoc conversion
-- **PDF Generation**: Professional scientific report layout
-- **Asset Integration**: Optimized diagrams and figures
+- **Title & Abstract** - Project overview with novel contributions summary
+- **Introduction** - Background, literature review, and comparative analysis  
+- **Project Introduction** - Current state and technical context
+- **Desired State** - Goals, vision, and success criteria
+- **Planning & Solution** - Architecture, technology stack, and design decisions
+- **Implementation** - Core functionality, algorithms, and code examples
+- **Control of Success** - Acceptance criteria and validation metrics
+- **Results** - Outcomes, evaluation data, and gap analysis
+- **Summary & Outlook** - Conclusions and future roadmap
+- **Bibliography** - Academic citations and technical references
+
+**Technical Analysis**  
+
+- Repository architecture mapping and pattern identification
+- Technology stack assessment and dependency analysis
+- Novel algorithm and implementation discovery
+- Code quality and testing strategy evaluation
+
+**Supporting Materials**  
+
+- Optimized PlantUML diagrams and technical figures
+- Academic citation database (BibTeX format)
+- Asset manifest for figure and table references
+- Quality validation reports with recommendations
+
+### Output Formats
+
+**Publication-Ready Documents:**  
+
+- **Markdown Sections**: Individual files with YAML frontmatter
+- **PDF Generation**: Professional scientific report layout via pandoc
+- **Academic Standards**: IEEE/ACM formatting compliance
+- **Asset Integration**: High-resolution diagrams and figures
+
+**Business Value:**
+
+- **Knowledge Transfer**: Transform tribal knowledge into structured documentation
+- **Academic Publication**: Ready for conference and journal submission
+- **Technical Documentation**: Comprehensive architecture and implementation guides
+- **Research Foundation**: Structured analysis for further academic work
 
 ## Project Structure
 
@@ -116,3 +154,5 @@ make create_struct         # Initialize directory structure
 ## TODO
 
 - [ ] LaTex option
+- [ ] Use Github API
+- [ ] Optional asset-processor and bibliography-curator agents
