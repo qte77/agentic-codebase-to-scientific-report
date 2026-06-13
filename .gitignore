@@ -1,5 +1,13 @@
 .env
 
+# Secrets / credentials — never commit (defends against committed-secret leaks)
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+*.token
+
 # Generated pipeline build artifacts
 /results/
 /.tmp/
