@@ -2,29 +2,75 @@
 
 .SILENT:
 .ONESHELL:
-.PHONY: all analyze synthesize validate create_struct clean_struct setup_claude_code help
+.PHONY: all analyze synthesize validate repo_ingest pandoc_run create_struct clean_struct setup_claude_code lint lint_md lint_sh help
 .DEFAULT_GOAL := help
+
+
+# MARK: Config
+
+
+# Target repo + branch are read from the Primary Target in config/sources.md.
+TARGET_REPO := $(shell grep -m1 -E '^Repository:' config/sources.md | sed -E 's/^Repository:[[:space:]]*//')
+TARGET_BRANCH := $(shell grep -m1 -E '^Branch:' config/sources.md | sed -E 's/^Branch:[[:space:]]*//')
+
+# Repo ingestion tooling (override on the command line as needed).
+GRAPHIFY ?= graphify
+GRAPHIFY_BACKEND ?= claude
+
+# PDF / pandoc conversion (scripts reused from Agents-eval).
+PANDOC_SCRIPT := scripts/writeup/run-pandoc.sh
+WRITEUP_DIR ?= results/sections
+OUTPUT_PDF ?= results/report.pdf
+CSL ?= scripts/writeup/citation-styles/ieee.csl
+
+# PlantUML diagram rendering.
+PLANTUML_SCRIPT := scripts/writeup/generate-plantuml-png.sh
+PLANTUML_CONTAINER := plantuml/plantuml:latest
 
 
 # MARK: Report
 
 
-all: analyze synthesize validate  ## Perform full scientific report generation process
+all: analyze synthesize validate pandoc_run  ## Perform full scientific report generation process
 
-analyze: create_struct  ## Analyze the target repository (Phase 1)
+analyze: repo_ingest  ## Analyze the target repository (Phase 1)
+	if [ -n "$(SKIP_ANALYZE)" ]; then echo "SKIP_ANALYZE set; skipping analysis."; exit 0; fi
 	echo "Starting Repository Analysis..."
-	cat .claude/agents/repo-analyzer.md | claude -p "execute"
+	{ cat results/repo-context.xml results/graph.json 2>/dev/null; cat .claude/agents/repo-analyzer.md; } | claude -p "execute"
 	echo "Repository Analysis completed."
 
 synthesize: analyze  ## Synthesize sections into report (Phase 2)
+	if [ -n "$(SKIP_SYNTHESIZE)" ]; then echo "SKIP_SYNTHESIZE set; skipping synthesis."; exit 0; fi
 	echo "Starting Section Synthesis..."
 	cat .claude/agents/section-synthesizer.md | claude -p "execute"
 	echo "Section Synthesis completed."
 
 validate: synthesize  ## Validate synthesized content against analysis (Phase 3)
+	if [ -n "$(SKIP_VALIDATE)" ]; then echo "SKIP_VALIDATE set; skipping validation."; exit 0; fi
 	echo "Starting Content Validation..."
 	cat .claude/agents/validator.md | claude -p "execute"
 	echo "Content Validation completed."
+
+pandoc_run:  ## Convert validated sections to PDF via pandoc/XeLaTeX (Phase 4)
+	echo "Converting sections in $(WRITEUP_DIR) to PDF ..."
+	$(PANDOC_SCRIPT) "$(WRITEUP_DIR)/*.md" "$(OUTPUT_PDF)" "$(WRITEUP_DIR)/00_title_abstract.tex" "" "" "" "en-US" "true" "$(WRITEUP_DIR)/references.bib" "$(CSL)" "true" "true" "true"
+	echo "PDF written to $(OUTPUT_PDF)."
+
+repo_ingest: create_struct  ## Ingest target repo via Repomix + Graphify (Phase 0)
+	echo "Ingesting target repo: $(TARGET_REPO) (branch $(TARGET_BRANCH)) ..."
+	npx --yes repomix@latest "$(TARGET_REPO)" --compress --output results/repo-context.xml
+	if [ -z "$(SKIP_GRAPHIFY)" ]; then
+	    if command -v $(GRAPHIFY) >/dev/null 2>&1; then
+	        echo "Building Graphify knowledge graph (backend: $(GRAPHIFY_BACKEND)) ..."
+	        ( cd "$(TARGET_REPO)" && $(GRAPHIFY) extract . --backend $(GRAPHIFY_BACKEND) && $(GRAPHIFY) label . )
+	        cp "$(TARGET_REPO)/graphify-out/graph.json" results/graph.json || echo "WARN: graph.json not produced"
+	    else
+	        echo "WARN: '$(GRAPHIFY)' not found (pip install graphifyy). Skipping knowledge graph."
+	    fi
+	else
+	    echo "SKIP_GRAPHIFY set; skipping knowledge graph."
+	fi
+	echo "Ingestion completed."
 
 create_struct:  ## Setup directory structure
 	echo "Creating directory structure..."
@@ -88,6 +134,18 @@ setup_pdf_converter:  ## Setup PDF converter tools: pandoc, wkhtmltopdf
 		echo "Error: Unsupported PDF converter choice '$${converter_choice}'. $${converter_supported}"
 		exit 1
 	fi
+
+
+# MARK: Lint
+
+
+lint: lint_md lint_sh  ## Run all linters (Markdown + shell)
+
+lint_md:  ## Lint Markdown with markdownlint-cli2
+	npx --yes markdownlint-cli2
+
+lint_sh:  ## Lint shell scripts with shellcheck (errors only)
+	shellcheck -S error scripts/writeup/*.sh
 
 
 # MARK: help

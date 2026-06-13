@@ -34,7 +34,11 @@ When invoked:
 
 - Separated markdown sections ready for pandoc PDF conversion
 - Academic formatting with proper citations
-- Directory structure: results/YYYY-MM-DD-title/
+- Output directory: `results/sections/` (consumed by `make pandoc_run`)
+- Pandoc-ready file set: `00_frontmatter.md` (YAML build settings),
+  `00_title_abstract.tex` (LaTeX title page + abstract, passed via pandoc `-B`),
+  numbered content sections `01_*.md` .. `08_*.md`, and `references.bib`
+- Do NOT write list-of-figures/list-of-tables files; pandoc auto-generates them
 
 ## Synthesis Guidelines
 
@@ -46,7 +50,7 @@ When invoked:
 - Proper markdown hierarchy (##, ###, ####)
 - Academic figure references and captions
 - Code blocks with language specification
-- Citation format: [Author, Year] or (Author, Year)
+- Citation format: IEEE numeric `[@bibkey]` resolving to `references.bib`
 
 ### Content Integration Requirements
 
@@ -97,30 +101,39 @@ When invoked:
 
 ### Section Specifications
 
-**00-title-abstract.md** (~1 page)
+Write all files to `results/sections/`. Filenames use the pandoc-friendly
+underscore convention so `make pandoc_run` assembles them in order.
 
-- Title page with project metadata and abstract
-- Keywords and definitions summary
+**00_frontmatter.md** — Pandoc build settings (YAML only, no prose)
 
-**01-introduction.md** (~6 pages)
+- YAML block with: title, subtitle, author, date, `bibliography: references.bib`,
+  `csl`, `toc-depth`, `geometry`, `linestretch`
+- No content body; this file only configures the pandoc build
 
-- Focus on critical background and literature review
+**00_title_abstract.tex** — Title page + abstract (raw LaTeX, passed via `-B`)
+
+- LaTeX title page (title, subtitle, version, date) and an Abstract section
+  (~200 words) plus a Keywords line
+
+**01_introduction.md** (~6 pages)
+
+- Critical background and literature review
 - Extract definitions from existing config files and project documentation
 - Comparative overview: models, frameworks, datasets, benchmarks
 - Overview evaluation and project approach summary
 
-**02-project-introduction.md** (~8 pages)
+**02_project_introduction.md** (~8 pages)
 
 - Why, What, How framework
 - Current state analysis
 - Technology evaluation from project documentation
 
-**03-desired-state.md** (~8 pages)
+**03_desired_state.md** (~8 pages)
 
 - End goals and vision from sprint files, PRD.md, userstory.md
 - Sources: Existing docs + literature review
 
-**04-planning-solution.md** (~6 pages)
+**04_planning_solution.md** (~6 pages)
 
 - Architecture (PlantUML diagrams)
 - Technology Stack (project decisions)
@@ -128,7 +141,7 @@ When invoked:
 - Dataset Integration Strategy
 - Evaluation Framework Design
 
-**05-implementation.md** (~12 pages)
+**05_implementation.md** (~12 pages)
 
 - Core Framework Implementation
 - System Components & Tools
@@ -137,39 +150,31 @@ When invoked:
 - Direct code examples from implementation
 - Architecture diagrams with academic formatting
 
-**06-control-success.md** (~6 pages)
+**06_control_success.md** (~6 pages)
 
 - Acceptance criteria from UserStory.md
 - Success metrics and validation approaches
 
-**07-results.md** (~10 pages)
+**07_results.md** (~10 pages)
 
 - Sprint results + evaluation data
 - Current status + future roadmap
 - Sprint outcomes, gap analysis
 - Concrete next steps from sprint plan
 
-**08-summary-outlook.md** (~2 pages)
+**08_summary_outlook.md** (~2 pages)
 
 - Key contributions and novel approaches
 - Future work and roadmap
 
-**09-bibliography.md**  
+**references.bib** — BibTeX bibliography
 
-- Academic citations with proper formatting
-- Title, link, author(s), date published, access date
+- All cited sources as BibTeX entries (title, author(s), year, link, accessed date)
+- Citations in sections use `[@bibkey]`; every key must exist here
 
-**10-list-of-figures.md**  
-
-- Sequential figure listing with page numbers
-- Format: "Figure X: Caption ... Page Y"
-- Include architecture diagrams, PlantUML outputs, evaluation charts
-
-**11-list-of-tables.md**  
-
-- Sequential table listing with page numbers  
-- Format: "Table X: Caption ... Page Y"
-- Include comparison tables, metrics tables, evaluation results
+List of Figures and List of Tables are generated automatically by pandoc
+(`make pandoc_run` passes `list_of_figures=true` and `list_of_tables=true`); do
+not author them as section files.
 
 ## Output Requirements
 
@@ -182,7 +187,7 @@ Generate section files in `results/sections/` with:
 
 ### Section File Metadata
 
-Each generated section file must include YAML frontmatter metadata:
+Each generated content section file (`01_*.md` .. `08_*.md`) must include YAML frontmatter metadata:
 
 ```yaml
 ---
@@ -199,12 +204,15 @@ format_version: "1.0"
 **Metadata Fields:**
 
 - `type`: Always "report-section"
-- `section_number`: Two-digit section number (00-11)
+- `section_number`: Two-digit content section number (01-08)
 - `section_title`: Human-readable section title
 - `page_target`: Target page length for this section
 - `dependencies`: Array of files used to generate this section
 - `generated_date`: Date when section was generated (YYYY-MM-DD format)
 - `format_version`: Version of the metadata format
+
+(The `00_frontmatter.md` and `00_title_abstract.tex` files are pandoc build
+inputs and do not carry this report-section metadata.)
 
 ## Quality Standards
 

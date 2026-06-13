@@ -4,6 +4,12 @@ This project uses specialized subagents configured in `.claude/agents/` for scie
 
 ## Execution Instructions for Claude
 
+### Phase 0: Repository Ingestion
+
+Run `make repo_ingest` to pack the target repository (from `config/sources.md`)
+with Repomix into `results/repo-context.xml` and build a Graphify knowledge graph
+into `results/graph.json`. These are the inputs to Phase 1.
+
 ### Phase 1: Repository Analysis
 
 Use the **repo-analyzer** subagent to extract technical architecture, implementation details, and documentation from the target code repository. This generates structured analysis data and asset inventory.
@@ -18,15 +24,21 @@ Use the **validator** subagent to ensure quality, accuracy, and academic complia
 
 ## Expected Pipeline Output
 
+- `results/repo-context.xml` - Repomix bundle of the target repository
+- `results/graph.json` - Graphify knowledge graph (optional)
 - `results/sections/analysis.yaml` - Repository technical analysis
-- `results/sections/NN-section-name.md` - Academic report sections  
-- `results/validation-report.md` - Quality assessment
+- `results/sections/00_frontmatter.md`, `00_title_abstract.tex`, `01_*.md` .. `08_*.md`, `references.bib` - Pandoc-ready report sections
+- `results/validation-report.md` - Quality assessment with CHT scores
 - `results/assets/` - Processed diagrams and documentation
+- `results/report.pdf` - Final assembled scientific report
 
 ## Automation Features
 
 Makefile orchestration available with `make analyze`, `make synthesize`, `make validate` for batch execution.
 
-### Phase 4: Pipeline Summary Generation
+### Phase 4: PDF Assembly
 
-The system produces publication-ready academic reports with comprehensive technical analysis, structured sections, and quality validation suitable for scientific documentation and knowledge transfer.
+Run `make pandoc_run` to assemble the validated sections into a publication-ready
+PDF (`results/report.pdf`) via pandoc/XeLaTeX with IEEE citations. `make all` runs
+Phase 0 through Phase 4 in order, producing comprehensive technical analysis,
+structured sections, quality validation, and a final scientific report.

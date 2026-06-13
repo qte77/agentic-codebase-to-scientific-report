@@ -1,0 +1,21 @@
+{
+  // Lenient markdown lint config: structural correctness without style noise.
+  "config": {
+    "default": true,
+    "MD013": false, // line length
+    "MD024": { "siblings_only": true }, // duplicate headings only flagged among siblings
+    "MD029": false, // ordered list item prefix
+    "MD033": false, // inline HTML (README/config use it intentionally)
+    "MD036": false, // emphasis used as pseudo-heading (agent specs use **bold** labels)
+    "MD040": false, // fenced code language hint
+    "MD041": false, // first line in file must be a top-level heading
+    "MD046": false, // code block style
+    "MD060": false  // table column pipe spacing style
+  },
+  "globs": ["**/*.md"],
+  "ignores": [
+    "results/**",
+    "node_modules/**",
+    "scripts/writeup/README.md"
+  ]
+}

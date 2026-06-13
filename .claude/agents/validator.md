@@ -79,14 +79,53 @@ Validate all generated sections against analysis data and academic requirements 
 - All figures and assets properly referenced
 - Bibliography complete with proper citations
 
+## Scoring Rubric (Completeness / Helpfulness / Truthfulness)
+
+Score every content section (`01_*.md` .. `08_*.md`) on three axes, 0-10 each
+(adapted from DocAgent, ACL 2025):
+
+- **Completeness** — required subsections present and at/near the page target;
+  all referenced figures/tables/assets resolve.
+- **Helpfulness** — technical depth and clarity appropriate for the target
+  audience; coherent narrative flow.
+- **Truthfulness** — every technical claim is supported by
+  `results/sections/analysis.yaml` (prefer `EXTRACTED`-confidence facts from
+  `results/graph.json`); no unsupported or contradicted statements.
+
+Derive a per-section `validation_status`:
+
+- `pass` — all three axes >= 7
+- `warn` — any axis 4-6
+- `fail` — any axis <= 3
+
+Write `validation_status` into the YAML frontmatter of each section file
+in-place (Edit), so downstream tooling can gate on it.
+
 ## Output Requirements
 
-Generate validation report in `results/validation-report.md` including:
+Generate the validation report in `results/validation-report.md`. It MUST begin
+with a machine-readable YAML scoring block, followed by prose:
+
+```yaml
+---
+type: "validation-report"
+generated_date: "YYYY-MM-DD"
+overall_status: "pass | warn | fail"
+sections:
+  - file: "01_introduction.md"
+    completeness: 0
+    helpfulness: 0
+    truthfulness: 0
+    status: "pass | warn | fail"
+---
+```
+
+After the YAML block, include prose covering:
 
 - Section completeness assessment
-- Technical accuracy verification
+- Technical accuracy verification (claims cross-checked against analysis.yaml)
 - Format compliance check
-- Recommendations for improvements
+- Prioritised recommendations for improvements
 
 ## Success Criteria
 
