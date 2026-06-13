@@ -2,7 +2,7 @@
 
 .SILENT:
 .ONESHELL:
-.PHONY: all analyze synthesize validate repo_ingest create_struct clean_struct setup_claude_code help
+.PHONY: all analyze synthesize validate repo_ingest pandoc_run create_struct clean_struct setup_claude_code help
 .DEFAULT_GOAL := help
 
 
@@ -17,11 +17,21 @@ TARGET_BRANCH := $(shell grep -m1 -E '^Branch:' config/sources.md | sed -E 's/^B
 GRAPHIFY ?= graphify
 GRAPHIFY_BACKEND ?= claude
 
+# PDF / pandoc conversion (scripts reused from Agents-eval).
+PANDOC_SCRIPT := scripts/writeup/run-pandoc.sh
+WRITEUP_DIR ?= results/sections
+OUTPUT_PDF ?= results/report.pdf
+CSL ?= scripts/writeup/citation-styles/ieee.csl
+
+# PlantUML diagram rendering.
+PLANTUML_SCRIPT := scripts/writeup/generate-plantuml-png.sh
+PLANTUML_CONTAINER := plantuml/plantuml:latest
+
 
 # MARK: Report
 
 
-all: analyze synthesize validate  ## Perform full scientific report generation process
+all: analyze synthesize validate pandoc_run  ## Perform full scientific report generation process
 
 analyze: repo_ingest  ## Analyze the target repository (Phase 1)
 	echo "Starting Repository Analysis..."
@@ -37,6 +47,11 @@ validate: synthesize  ## Validate synthesized content against analysis (Phase 3)
 	echo "Starting Content Validation..."
 	cat .claude/agents/validator.md | claude -p "execute"
 	echo "Content Validation completed."
+
+pandoc_run:  ## Convert validated sections to PDF via pandoc/XeLaTeX (Phase 4)
+	echo "Converting sections in $(WRITEUP_DIR) to PDF ..."
+	$(PANDOC_SCRIPT) "$(WRITEUP_DIR)/*.md" "$(OUTPUT_PDF)" "$(WRITEUP_DIR)/00_title_abstract.tex" "" "" "" "en-US" "true" "$(WRITEUP_DIR)/references.bib" "$(CSL)" "true" "true" "true"
+	echo "PDF written to $(OUTPUT_PDF)."
 
 repo_ingest: create_struct  ## Ingest target repo via Repomix + Graphify (Phase 0)
 	echo "Ingesting target repo: $(TARGET_REPO) (branch $(TARGET_BRANCH)) ..."

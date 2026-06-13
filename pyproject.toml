@@ -1,0 +1,9 @@
+[project]
+name = "agentic-codebase-to-scientific-report"
+version = "0.1.0"
+description = "Agentic pipeline that turns a code repository into a scientific report"
+requires-python = ">=3.10"
+
+# Note: this project has no Python sources. This minimal manifest exists so the
+# reused scripts/writeup/run-pandoc.sh can read the report name/version from the
+# [project] section when assembling the PDF.
