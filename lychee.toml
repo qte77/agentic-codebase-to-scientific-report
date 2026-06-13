@@ -1,0 +1,21 @@
+# Local lychee config — overrides the upstream qte77/.github default.
+# Each exclusion is a deliberate decision, not a blanket bypass:
+#
+#   - config/README.md documents how to fill in config files and contains
+#     intentionally fake EXAMPLE urls (example.com, example-university.edu,
+#     company.com, a sample arXiv id, and template github.com/user|organization
+#     paths). They are illustrations, not real references.
+#   - scripts/writeup/README.md is copied verbatim from the Agents-eval repo and
+#     documents that project's paths; its links are out of scope for this repo.
+exclude_path = [
+    "scripts/writeup/README.md",
+]
+exclude = [
+    "https://github\\.com/user/",
+    "https://github\\.com/organization/",
+    "https://example\\.com",
+    "https://example-university\\.edu",
+    "https://company\\.com",
+    "ieee-style-guide\\.example\\.com",
+    "https://arxiv\\.org/pdf/2301\\.12345",
+]
