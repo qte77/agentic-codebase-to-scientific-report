@@ -16,6 +16,7 @@ TARGET_BRANCH := $(shell grep -m1 -E '^Branch:' config/sources.md | sed -E 's/^B
 # Repo ingestion tooling (override on the command line as needed).
 GRAPHIFY ?= graphify
 GRAPHIFY_BACKEND ?= claude
+REPOMIX_VERSION ?= 1.14.1
 
 # PDF / pandoc conversion (scripts reused from Agents-eval).
 PANDOC_SCRIPT := scripts/writeup/run-pandoc.sh
@@ -25,7 +26,8 @@ CSL ?= scripts/writeup/citation-styles/ieee.csl
 
 # PlantUML diagram rendering.
 PLANTUML_SCRIPT := scripts/writeup/generate-plantuml-png.sh
-PLANTUML_CONTAINER := plantuml/plantuml:latest
+# Pinned by digest (plantuml/plantuml:latest as of 2026-06-08); bump deliberately.
+PLANTUML_CONTAINER := plantuml/plantuml@sha256:47870c1f76cfb3747bc7090bfe83013a4e3105b5a0bb1515e2baf5d3e2b3ee9d
 
 
 # MARK: Report
@@ -58,7 +60,7 @@ pandoc_run:  ## Convert validated sections to PDF via pandoc/XeLaTeX (Phase 4)
 
 repo_ingest: create_struct  ## Ingest target repo via Repomix + Graphify (Phase 0)
 	echo "Ingesting target repo: $(TARGET_REPO) (branch $(TARGET_BRANCH)) ..."
-	npx --yes repomix@latest "$(TARGET_REPO)" --compress --output results/repo-context.xml
+	npx --yes repomix@$(REPOMIX_VERSION) "$(TARGET_REPO)" --compress --output results/repo-context.xml
 	if [ -z "$(SKIP_GRAPHIFY)" ]; then
 	    if command -v $(GRAPHIFY) >/dev/null 2>&1; then
 	        echo "Building Graphify knowledge graph (backend: $(GRAPHIFY_BACKEND)) ..."
