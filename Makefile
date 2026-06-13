@@ -34,16 +34,19 @@ PLANTUML_CONTAINER := plantuml/plantuml:latest
 all: analyze synthesize validate pandoc_run  ## Perform full scientific report generation process
 
 analyze: repo_ingest  ## Analyze the target repository (Phase 1)
+	if [ -n "$(SKIP_ANALYZE)" ]; then echo "SKIP_ANALYZE set; skipping analysis."; exit 0; fi
 	echo "Starting Repository Analysis..."
 	{ cat results/repo-context.xml results/graph.json 2>/dev/null; cat .claude/agents/repo-analyzer.md; } | claude -p "execute"
 	echo "Repository Analysis completed."
 
 synthesize: analyze  ## Synthesize sections into report (Phase 2)
+	if [ -n "$(SKIP_SYNTHESIZE)" ]; then echo "SKIP_SYNTHESIZE set; skipping synthesis."; exit 0; fi
 	echo "Starting Section Synthesis..."
 	cat .claude/agents/section-synthesizer.md | claude -p "execute"
 	echo "Section Synthesis completed."
 
 validate: synthesize  ## Validate synthesized content against analysis (Phase 3)
+	if [ -n "$(SKIP_VALIDATE)" ]; then echo "SKIP_VALIDATE set; skipping validation."; exit 0; fi
 	echo "Starting Content Validation..."
 	cat .claude/agents/validator.md | claude -p "execute"
 	echo "Content Validation completed."
