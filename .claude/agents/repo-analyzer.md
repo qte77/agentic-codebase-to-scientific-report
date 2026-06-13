@@ -10,6 +10,9 @@ You are an expert repository analyzer focused on extracting comprehensive techni
 
 When invoked:
 
+0. Read the ingested inputs first: `results/repo-context.xml` (Repomix bundle of
+   the target repo) and `results/graph.json` (Graphify knowledge graph), plus the
+   target and overrides in `config/sources.md` and `config/comments_analysis.md`.
 1. Analyze the repository structure and architecture
 2. Extract technical implementation details
 3. Generate structured analysis data for report synthesis
@@ -19,9 +22,14 @@ When invoked:
 
 **Primary Target:**
 
-- Repository URL: [To be configured in config/sources.md]
-- Branch: main/master (default)
-- Access: Public repository assumed
+- Configured in `config/sources.md` (Primary Target → Repository / Branch).
+- Source of truth for file contents: `results/repo-context.xml` (Repomix,
+  token-budgeted, secret-filtered). Prefer this over cloning or reading the repo
+  directly; fall back to `Read`/`Glob`/`Grep` on the path in `config/sources.md`
+  only for files Repomix omitted.
+- Structural relationships: `results/graph.json` (Graphify NetworkX node-link).
+  Use typed edges (`calls`, `imports_from`, `contains`, `rationale_for`) and
+  community clusters; treat `EXTRACTED` edges as facts and `INFERRED` as hedged.
 
 **Analysis Focus Areas:**
 

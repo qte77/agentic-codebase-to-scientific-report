@@ -2,8 +2,20 @@
 
 .SILENT:
 .ONESHELL:
-.PHONY: all analyze synthesize validate create_struct clean_struct setup_claude_code help
+.PHONY: all analyze synthesize validate repo_ingest create_struct clean_struct setup_claude_code help
 .DEFAULT_GOAL := help
+
+
+# MARK: Config
+
+
+# Target repo + branch are read from the Primary Target in config/sources.md.
+TARGET_REPO := $(shell grep -m1 -E '^Repository:' config/sources.md | sed -E 's/^Repository:[[:space:]]*//')
+TARGET_BRANCH := $(shell grep -m1 -E '^Branch:' config/sources.md | sed -E 's/^Branch:[[:space:]]*//')
+
+# Repo ingestion tooling (override on the command line as needed).
+GRAPHIFY ?= graphify
+GRAPHIFY_BACKEND ?= claude
 
 
 # MARK: Report
@@ -11,9 +23,9 @@
 
 all: analyze synthesize validate  ## Perform full scientific report generation process
 
-analyze: create_struct  ## Analyze the target repository (Phase 1)
+analyze: repo_ingest  ## Analyze the target repository (Phase 1)
 	echo "Starting Repository Analysis..."
-	cat .claude/agents/repo-analyzer.md | claude -p "execute"
+	{ cat results/repo-context.xml results/graph.json 2>/dev/null; cat .claude/agents/repo-analyzer.md; } | claude -p "execute"
 	echo "Repository Analysis completed."
 
 synthesize: analyze  ## Synthesize sections into report (Phase 2)
@@ -25,6 +37,22 @@ validate: synthesize  ## Validate synthesized content against analysis (Phase 3)
 	echo "Starting Content Validation..."
 	cat .claude/agents/validator.md | claude -p "execute"
 	echo "Content Validation completed."
+
+repo_ingest: create_struct  ## Ingest target repo via Repomix + Graphify (Phase 0)
+	echo "Ingesting target repo: $(TARGET_REPO) (branch $(TARGET_BRANCH)) ..."
+	npx --yes repomix@latest "$(TARGET_REPO)" --compress --output results/repo-context.xml
+	if [ -z "$(SKIP_GRAPHIFY)" ]; then
+	    if command -v $(GRAPHIFY) >/dev/null 2>&1; then
+	        echo "Building Graphify knowledge graph (backend: $(GRAPHIFY_BACKEND)) ..."
+	        ( cd "$(TARGET_REPO)" && $(GRAPHIFY) extract . --backend $(GRAPHIFY_BACKEND) && $(GRAPHIFY) label . )
+	        cp "$(TARGET_REPO)/graphify-out/graph.json" results/graph.json || echo "WARN: graph.json not produced"
+	    else
+	        echo "WARN: '$(GRAPHIFY)' not found (pip install graphifyy). Skipping knowledge graph."
+	    fi
+	else
+	    echo "SKIP_GRAPHIFY set; skipping knowledge graph."
+	fi
+	echo "Ingestion completed."
 
 create_struct:  ## Setup directory structure
 	echo "Creating directory structure..."
