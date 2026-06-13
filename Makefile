@@ -2,7 +2,7 @@
 
 .SILENT:
 .ONESHELL:
-.PHONY: all analyze synthesize validate repo_ingest pandoc_run create_struct clean_struct setup_claude_code help
+.PHONY: all analyze synthesize validate repo_ingest pandoc_run create_struct clean_struct setup_claude_code lint lint_md lint_sh help
 .DEFAULT_GOAL := help
 
 
@@ -134,6 +134,18 @@ setup_pdf_converter:  ## Setup PDF converter tools: pandoc, wkhtmltopdf
 		echo "Error: Unsupported PDF converter choice '$${converter_choice}'. $${converter_supported}"
 		exit 1
 	fi
+
+
+# MARK: Lint
+
+
+lint: lint_md lint_sh  ## Run all linters (Markdown + shell)
+
+lint_md:  ## Lint Markdown with markdownlint-cli2
+	npx --yes markdownlint-cli2
+
+lint_sh:  ## Lint shell scripts with shellcheck (errors only)
+	shellcheck -S error scripts/writeup/*.sh
 
 
 # MARK: help

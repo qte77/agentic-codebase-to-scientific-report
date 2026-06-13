@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Lint Markdown
+        run: make lint_md
+
+      - name: Lint shell scripts
+        run: make lint_sh
+
+      - name: Validate pipeline Makefile (dry-run, no LLM cost)
+        run: make -n all
