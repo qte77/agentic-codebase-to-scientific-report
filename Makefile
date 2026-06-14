@@ -41,7 +41,7 @@ all: analyze synthesize validate pandoc_run  ## Perform full scientific report g
 analyze: repo_ingest  ## Analyze the target repository (Phase 1)
 	if [ -n "$(SKIP_ANALYZE)" ]; then echo "SKIP_ANALYZE set; skipping analysis."; exit 0; fi
 	echo "Starting Repository Analysis..."
-	{ cat results/repo-context.xml results/graph.json 2>/dev/null; cat .claude/agents/repo-analyzer.md; } | claude -p "execute"
+	cat .claude/agents/repo-analyzer.md | claude -p "execute"
 	echo "Repository Analysis completed."
 
 synthesize: analyze  ## Synthesize sections into report (Phase 2)
