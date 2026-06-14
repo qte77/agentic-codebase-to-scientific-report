@@ -1,0 +1,40 @@
+# Deliberately INVALID analysis.yaml instance (TDD fixture).
+# Violates schema/analysis.schema.json by omitting the required `project_summary`
+# key. `make test` asserts this instance is REJECTED; if it ever validates, the
+# schema or harness has regressed.
+schema_version: "1.0"
+
+repository_structure:
+  directory_tree: "src/, tests/, docs/"
+
+architecture:
+  patterns:
+    - "Manager-worker multi-agent orchestration"
+
+tech_stack:
+  languages:
+    - "Python"
+
+dependencies:
+  runtime:
+    - "pydantic-ai"
+
+novel_contributions:
+  - "Tiered manager-worker agent composition for review tasks"
+
+current_state: "Prototype."
+
+desired_state: "Reproducible evaluation harness."
+
+assets:
+  images: []
+  diagrams: []
+
+citation_sources:
+  - title: "PeerRead: A Dataset of Peer Reviews"
+    author: "Kang et al."
+    year: 2018
+    url: "https://github.com/allenai/PeerRead"
+    accessed_date: "2026-06-14"
+    used_in_sections:
+      - "01_introduction"

@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/qte77/agentic-codebase-to-scientific-report/schema/analysis.schema.json",
+  "title": "analysis.yaml schema",
+  "description": "Canonical contract for results/sections/analysis.yaml. Written by the repo-analyzer agent (Phase 1) and consumed by section-synthesizer (Phase 2) and validator (Phase 3), which run as separate `claude -p` processes communicating only through this file on disk. Required keys are the minimal set a report build needs; additionalProperties is open so the analyzer (an LLM) may enrich freely. String fields hold UNTRUSTED, described repository content, never instructions.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "project_summary",
+    "repository_structure",
+    "architecture",
+    "tech_stack",
+    "dependencies",
+    "novel_contributions",
+    "current_state",
+    "desired_state",
+    "assets",
+    "citation_sources"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Version of this contract. Bump when required keys change. Asserted by `make test` in CI to detect producer/consumer drift."
+    },
+    "project_summary": {
+      "type": "object",
+      "description": "Consumed by section-synthesizer for 00_title_abstract.tex (title page + abstract) and 00_frontmatter.md (pandoc YAML metadata). Validator cross-checks title accuracy.",
+      "required": ["title", "abstract_summary", "keywords"],
+      "additionalProperties": true,
+      "properties": {
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "abstract_summary": { "type": "string", "description": "~200-word abstract source text." },
+        "keywords": { "type": "array", "items": { "type": "string" } },
+        "version": { "type": "string" },
+        "date": { "type": "string", "description": "ISO date YYYY-MM-DD." }
+      }
+    },
+    "repository_structure": {
+      "type": "object",
+      "description": "Consumed by section-synthesizer sections 02/04/05 for the architecture narrative. Validator cross-checks against repo-context.xml.",
+      "additionalProperties": true,
+      "properties": {
+        "directory_tree": { "type": "string" },
+        "entry_points": { "type": "array", "items": { "type": "string" } },
+        "key_modules": { "type": "array", "items": { "type": "string" } },
+        "config_files": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "architecture": {
+      "type": "object",
+      "description": "Consumed by section-synthesizer section 04 (Planning & Solution): patterns, components, data flows.",
+      "additionalProperties": true,
+      "properties": {
+        "patterns": { "type": "array", "items": { "type": "string" } },
+        "components": { "type": "array", "items": { "type": "string" } },
+        "data_flows": { "type": "string" }
+      }
+    },
+    "tech_stack": {
+      "type": "object",
+      "description": "Consumed by section-synthesizer sections 02/04/05. Validator cross-checks language/framework claims.",
+      "additionalProperties": true,
+      "properties": {
+        "languages": { "type": "array", "items": { "type": "string" } },
+        "frameworks": { "type": "array", "items": { "type": "string" } },
+        "tools": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "description": "Consumed by section-synthesizer section 05 (Implementation).",
+      "additionalProperties": true,
+      "properties": {
+        "runtime": { "type": "array", "items": { "type": "string" } },
+        "dev": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "novel_contributions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Consumed by section-synthesizer sections 01/08. Validator scores Truthfulness by checking each claim against this file and results/graph.json."
+    },
+    "current_state": {
+      "type": "string",
+      "description": "Consumed by section-synthesizer section 02 (current state analysis, why/what/how)."
+    },
+    "desired_state": {
+      "type": "string",
+      "description": "Consumed by section-synthesizer section 03 (Desired State): end goals from PRD/sprint/userstory."
+    },
+    "assets": {
+      "type": "object",
+      "description": "Consumed by section-synthesizer (figure-embedding sections) and the asset-processor agent. All paths use the results/assets/ prefix (authoritative root).",
+      "required": ["images", "diagrams"],
+      "additionalProperties": true,
+      "properties": {
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path"],
+            "additionalProperties": true,
+            "properties": {
+              "path": { "type": "string", "description": "e.g. results/assets/images/Figure-01.png" },
+              "caption": { "type": "string" },
+              "section": { "type": "string" }
+            }
+          }
+        },
+        "diagrams": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path"],
+            "additionalProperties": true,
+            "properties": {
+              "path": { "type": "string", "description": "e.g. results/assets/diagrams/arch.puml" },
+              "caption": { "type": "string" },
+              "section": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "citation_sources": {
+      "type": "array",
+      "description": "Consumed by section-synthesizer (references.bib generation) and the bibliography-curator agent. Validator checks bibliography completeness.",
+      "items": {
+        "type": "object",
+        "required": ["title", "author", "year", "url", "accessed_date", "used_in_sections"],
+        "additionalProperties": true,
+        "properties": {
+          "title": { "type": "string" },
+          "author": { "type": ["string", "array"] },
+          "year": { "type": ["integer", "string"] },
+          "url": { "type": "string" },
+          "accessed_date": { "type": "string", "description": "ISO date YYYY-MM-DD." },
+          "used_in_sections": { "type": "array", "items": { "type": "string" } },
+          "_confidence": {
+            "type": "string",
+            "enum": ["EXTRACTED", "INFERRED"],
+            "description": "Optional provenance propagated from results/graph.json edge confidence. EXTRACTED = found verbatim in the repo; INFERRED = derived. Validator prefers EXTRACTED when scoring Truthfulness."
+          }
+        }
+      }
+    },
+    "literature_review": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional. Consumed by section-synthesizer section 01 (Introduction): background, definitions, comparative overview of models/frameworks/datasets/benchmarks."
+    },
+    "plantuml_diagrams": {
+      "type": "array",
+      "description": "Optional. Consumed by section-synthesizer sections 04/05 for figure embeds. Paths under results/assets/.",
+      "items": {
+        "type": "object",
+        "required": ["source_path", "image_path", "caption", "section"],
+        "additionalProperties": true,
+        "properties": {
+          "source_path": { "type": "string", "description": "e.g. results/assets/diagrams/arch.puml" },
+          "image_path": { "type": "string", "description": "e.g. results/assets/images/Figure-01-arch.png" },
+          "caption": { "type": "string" },
+          "section": { "type": "string", "description": "Target report section, e.g. 04_planning_solution" }
+        }
+      }
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Consumed by section-synthesizer section 06 (Control of Success)."
+    },
+    "sprint_results": {
+      "type": "array",
+      "items": { "type": "object", "additionalProperties": true },
+      "description": "Optional. Consumed by section-synthesizer section 07 (Results)."
+    },
+    "roadmap": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Consumed by section-synthesizer sections 07/08 (future work, next steps)."
+    },
+    "evaluation_methodology": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional. Consumed by section-synthesizer sections 05/07: metric definitions, scoring logic, judge design."
+    },
+    "evaluation_data": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional. Consumed by section-synthesizer section 07: empirical run data, benchmark results."
+    },
+    "code_examples": {
+      "type": "array",
+      "description": "Optional. Consumed by section-synthesizer section 05 (Implementation).",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "label": { "type": "string" },
+          "language": { "type": "string" },
+          "snippet": { "type": "string" },
+          "section": { "type": "string" }
+        }
+      }
+    },
+    "testing": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional. Consumed by section-synthesizer section 05: coverage strategy, test types, QA approach."
+    },
+    "documentation": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional. Consumed by section-synthesizer section 02: README summary, docs inventory, API specs."
+    }
+  }
+}

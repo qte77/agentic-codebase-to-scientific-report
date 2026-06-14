@@ -53,6 +53,9 @@ Validate all generated sections against analysis data and academic requirements 
 
 - All section files in `results/sections/`
 - Repository analysis data from `results/sections/analysis.yaml`
+  (schema: `schema/analysis.schema.json`; `citation_sources[*]._confidence` carries
+  EXTRACTED/INFERRED provenance for Truthfulness scoring)
+- `results/graph.json` — read directly for EXTRACTED/INFERRED confidence cross-check
 - Asset manifest and bibliography data
 - Configuration requirements from `config/`
 
