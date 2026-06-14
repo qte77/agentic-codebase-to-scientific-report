@@ -19,14 +19,11 @@ guessing. Format: `- [ ] [PRIORITY] Description` with Context / Action / Impact.
     (spends tokens; never headless), including the Graphify path.
   - **Impact:** validates the full producer → consumer → PDF flow; may surface a
     first iteration on `analysis.yaml` content.
+  - **Plan:** [docs/plans/first-end-to-end-run.md](docs/plans/first-end-to-end-run.md).
 - [ ] [MEDIUM] Enable "Require approval for first-time contributors".
   - **Context:** Settings → Actions → General; UI-only, no clean API.
   - **Action:** maintainer toggles it (org-wide fix also covers it).
   - **Impact:** prevents untrusted first-time-contributor workflow runs.
-- [ ] [LOW] Enable GitHub Pages for the live docs site.
-  - **Context:** the MkDocs site (`mkdocs.yaml`, `docs/`) is built but not deployed.
-  - **Action:** enable Pages (Source: GitHub Actions), then add the deploy workflow.
-  - **Impact:** publishes the documentation site.
 
 ## Resolved
 
