@@ -148,8 +148,8 @@ Generate `results/sections/analysis.yaml` conforming to the canonical schema in
 `schema/analysis.schema.json` (JSON Schema 2020-12): every key in its `required`
 list MUST be present and correctly typed. Extra keys are allowed
 (`additionalProperties` is open), so enrich freely. Save extracted assets to
-`results/assets/` directories and use the `results/assets/` prefix for every asset
-path stored in the YAML (not bare `assets/`).
+`results/assets/` directories and prefix every asset path stored in the YAML with
+`results/assets/`; never store a path without that prefix.
 
 ## Success Criteria
 

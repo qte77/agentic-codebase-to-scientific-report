@@ -3,7 +3,7 @@ type: "agent"
 role: "bibliography-curator"
 optional: true
 dependencies: ["results/sections/analysis.yaml", "config/targets.md"]
-outputs: ["results/sections/09-bibliography.md", "results/bibliography.bib", "results/citations.yaml"]
+outputs: ["results/sections/references.bib", "results/citations.yaml"]
 format_version: "1.0"
 ---
 
@@ -57,7 +57,7 @@ Organize references into:
 
 ## Output Formats
 
-1. **BibTeX File** (bibliography.bib)
+1. **BibTeX File** (results/sections/references.bib)
 
     ```bibtex
     @article{author2023,
@@ -69,15 +69,7 @@ Organize references into:
     }
     ```
 
-2. **Reference List** (09-bibliography.md)
-
-    ```markdown
-    ## References
-
-    Author, F. (2023). *Title of work*. Journal Name, 12(3), 45-67.
-    ```
-
-3. **Citation Database** (citations.yaml)
+2. **Citation Database** (citations.yaml)
 
     ```yaml
     citations:

@@ -62,7 +62,7 @@ skinparam linetype ortho
 ## Output Structure
 
 ```bash
-assets/
+results/assets/
 ├── images/
 │   ├── Figure-01-System-Overview.png
 │   ├── Figure-02-Architecture.png
@@ -80,8 +80,8 @@ assets/
 figures:
   - id: fig-01
     title: System Architecture Overview
-    path: assets/images/Figure-01-System-Overview.png
-    source: assets/diagrams/system-overview.puml
+    path: results/assets/images/Figure-01-System-Overview.png
+    source: results/assets/diagrams/system-overview.puml
     caption: High-level system architecture showing...
     section: 04-planning-solution
 ```
