@@ -96,7 +96,10 @@ When invoked:
 ### Input Data Sources
 
 - Repository analysis data from `results/sections/analysis.yaml`
-- Extracted assets from `results/assets/` directories
+  (canonical key names and types are defined in `schema/analysis.schema.json` —
+  read field meanings and their target sections from there)
+- Extracted assets from `results/assets/` directories (every asset path in
+  `analysis.yaml` uses the `results/assets/` prefix)
 - Configuration from `config/` directory (targets.md, comments_synthesis.md)
 
 ### Section Specifications
