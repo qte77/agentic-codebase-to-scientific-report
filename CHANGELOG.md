@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Apache-2.0 `LICENSE` and a Conventional Commits `.gitmessage` template.
 - Documentation site under `docs/` (architecture, user story, roadmap, how-tos)
   with `mkdocs.yaml`.
+- `CONTRIBUTING.md` with the Documentation Hierarchy authority map; `AGENT_LEARNINGS.md`
+  and `AGENT_REQUESTS.md` (knowledge + escalation).
+- CodeQL workflow analysing the GitHub Actions workflows, and issue templates.
+- `docs/plans/` capturing plans for open tasks, referenced from the roadmap and issues.
 
 ### Changed
 
@@ -29,6 +33,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pinned GitHub Actions to release SHAs; reduced default `GITHUB_TOKEN` scope.
 - `analyze` no longer double-loads the ingested context into the prompt.
 - Reduced `CLAUDE.md` to a clean `@AGENTS.md` shim.
+- Restructured `AGENTS.md` into the agent governance + orchestration contract.
+- Restructured `README.md` as an audience-segmented navigation hub, removing the
+  duplicated execution/output sections (now owned by `docs/` and `AGENTS.md`).
+- Consolidated Markdown linting to a single `.markdownlint.jsonc`, run recursively in
+  CI so `make lint_md` matches CI.
 
 ### Removed
 
@@ -45,3 +54,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Adopted the repo-baseline hardening: actions allowlist with
   `sha_pinning_required`, gitleaks secret scanning, secret-scanning push
   protection, and a signed-commit ruleset.
+- CodeQL static analysis of the GitHub Actions workflows.
