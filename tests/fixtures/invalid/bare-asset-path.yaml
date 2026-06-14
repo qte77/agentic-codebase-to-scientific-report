@@ -1,0 +1,25 @@
+# INVALID: an asset path omits the results/assets/ prefix, so pandoc could not
+# resolve the figure and the final PDF would silently lose it. Must be rejected by
+# the schema's path pattern. This is the red->green TDD case: before the pattern
+# was added to the schema this instance wrongly validated. Everything else here is
+# valid, so rejection isolates the path constraint.
+schema_version: "1.0"
+project_summary:
+  title: "Bare Asset Path"
+  abstract_summary: "Otherwise valid, but an asset path omits the results/assets/ prefix."
+  keywords:
+    - assets
+repository_structure: {}
+architecture: {}
+tech_stack: {}
+dependencies: {}
+novel_contributions: []
+current_state: "Prototype."
+desired_state: "Documented."
+assets:
+  images:
+    - path: "assets/images/Figure-01.png" # BUG: missing the results/ prefix
+      caption: "Architecture."
+      section: "04_planning_solution"
+  diagrams: []
+citation_sources: []

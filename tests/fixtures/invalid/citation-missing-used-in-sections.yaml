@@ -1,0 +1,26 @@
+# INVALID: a citation omits the required used_in_sections, so the synthesizer
+# could not map it into references.bib / the citing sections. Must be rejected
+# (nested-required-field guard, the failure mode that KeyErrors the synthesizer).
+schema_version: "1.0"
+project_summary:
+  title: "Citation Missing Field"
+  abstract_summary: "Otherwise valid, but a citation lacks used_in_sections."
+  keywords:
+    - citations
+repository_structure: {}
+architecture: {}
+tech_stack: {}
+dependencies: {}
+novel_contributions: []
+current_state: "Prototype."
+desired_state: "Documented."
+assets:
+  images: []
+  diagrams: []
+citation_sources:
+  - title: "PeerRead: A Dataset of Peer Reviews"
+    author: "Kang et al."
+    year: 2018
+    url: "https://github.com/allenai/PeerRead"
+    accessed_date: "2026-06-14"
+    # BUG: required used_in_sections is missing
