@@ -31,6 +31,9 @@ jobs:
       - name: Lint shell scripts
         run: make lint_sh
 
+      - name: Lint Markdown (recursive; org lint workflow only covers top-level)
+        run: make lint_md
+
       - name: Validate analysis.yaml schema contract (TDD)
         run: make test
 
