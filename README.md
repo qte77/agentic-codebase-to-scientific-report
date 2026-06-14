@@ -129,7 +129,11 @@ The system generates comprehensive scientific documentation with multiple delive
 │   ├── targets.md          # Report requirements
 │   ├── comments_analysis.md    # Analysis guidelines
 │   └── comments_synthesis.md   # Writing standards
-├── scripts/writeup/         # Reused pandoc/PlantUML PDF tooling
+├── schema/                  # Canonical analysis.yaml JSON Schema contract
+├── scripts/
+│   ├── writeup/             # Reused pandoc/PlantUML PDF tooling
+│   └── test/                # Schema + agent-spec path validation (make test)
+├── tests/fixtures/          # valid/ + invalid/ schema fixtures (TDD)
 ├── results/                 # Generated outputs (gitignored)
 │   ├── repo-context.xml    # Repomix bundle of the target repo
 │   ├── graph.json          # Graphify knowledge graph
@@ -154,6 +158,13 @@ The system generates comprehensive scientific documentation with multiple delive
 ```bash
 make setup_claude_code     # Install Claude Code CLI
 make create_struct         # Initialize directory structure
+```
+
+## Development
+
+```bash
+make lint                  # Markdown + shell lint
+make test                  # Validate the analysis.yaml schema contract + agent-spec paths
 ```
 
 ## TODO
