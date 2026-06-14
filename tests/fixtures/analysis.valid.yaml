@@ -1,0 +1,131 @@
+# Representative VALID analysis.yaml instance (TDD fixture).
+# Must conform to schema/analysis.schema.json. Synthetic data only — no secrets.
+# Modeled loosely on the Agents-eval target (PydanticAI MAS, BERTScore, PeerRead).
+schema_version: "1.0"
+
+project_summary:
+  title: "Evaluating a Multi-Agent System for Scientific Peer Review"
+  subtitle: "Architecture, Metrics, and Reproducibility"
+  abstract_summary: >
+    This report analyzes a multi-agent system that coordinates manager, researcher,
+    and analyst agents to evaluate scientific manuscripts. It documents the
+    architecture, evaluation methodology, and empirical results, emphasizing novel
+    contributions in agent orchestration and metric design.
+  keywords:
+    - multi-agent systems
+    - LLM evaluation
+    - peer review
+    - reproducibility
+  version: "1.0.0"
+  date: "2026-06-14"
+
+repository_structure:
+  directory_tree: "src/app/{agents,evals,datasets}, tests/, docs/, Makefile"
+  entry_points:
+    - "src/app/main.py"
+  key_modules:
+    - "src/app/agents/orchestrator.py"
+    - "src/app/evals/metrics.py"
+  config_files:
+    - "pyproject.toml"
+    - "Makefile"
+
+architecture:
+  patterns:
+    - "Manager-worker multi-agent orchestration"
+    - "Tool-augmented LLM agents"
+  components:
+    - "Orchestrator agent"
+    - "Researcher agent"
+    - "Analyst agent"
+  data_flows: "User query -> orchestrator -> delegated agents -> aggregated evaluation"
+
+tech_stack:
+  languages:
+    - "Python"
+  frameworks:
+    - "PydanticAI"
+    - "Streamlit"
+  tools:
+    - "uv"
+    - "pytest"
+
+dependencies:
+  runtime:
+    - "pydantic-ai"
+    - "streamlit"
+  dev:
+    - "pytest"
+    - "ruff"
+
+novel_contributions:
+  - "Tiered manager-worker agent composition for review tasks"
+  - "Composite BERTScore-based truthfulness metric with judge agents"
+
+current_state: >
+  An end-to-end prototype that orchestrates three agents and reports per-criterion
+  scores on a held-out subset of manuscripts.
+
+desired_state: >
+  A reproducible, configurable evaluation harness with batch execution, trace
+  persistence, and pluggable metrics, as outlined in the project PRD and sprint plan.
+
+assets:
+  images:
+    - path: "results/assets/images/Figure-01-architecture.png"
+      caption: "High-level multi-agent architecture."
+      section: "04_planning_solution"
+  diagrams:
+    - path: "results/assets/diagrams/architecture.puml"
+      caption: "PlantUML source for the architecture diagram."
+      section: "04_planning_solution"
+
+citation_sources:
+  - title: "PeerRead: A Dataset of Peer Reviews"
+    author: "Kang et al."
+    year: 2018
+    url: "https://github.com/allenai/PeerRead"
+    accessed_date: "2026-06-14"
+    used_in_sections:
+      - "01_introduction"
+      - "07_results"
+    _confidence: "EXTRACTED"
+
+literature_review:
+  comparative_overview: "Survey of LLM-as-judge and multi-agent evaluation frameworks."
+
+plantuml_diagrams:
+  - source_path: "results/assets/diagrams/architecture.puml"
+    image_path: "results/assets/images/Figure-01-architecture.png"
+    caption: "High-level multi-agent architecture."
+    section: "04_planning_solution"
+
+acceptance_criteria:
+  - "All three agents complete a review without unhandled errors."
+  - "Per-criterion scores are emitted for each manuscript."
+
+sprint_results:
+  - sprint: "S1"
+    outcome: "Orchestrator and researcher agents integrated."
+
+roadmap:
+  - "Add batch execution and trace persistence."
+  - "Expand metric suite beyond BERTScore."
+
+evaluation_methodology:
+  metrics: "Composite of BERTScore and judge-agent rubric scoring."
+
+evaluation_data:
+  summary: "Pilot run over 20 manuscripts with per-criterion aggregates."
+
+code_examples:
+  - label: "Orchestrator entry point"
+    language: "python"
+    snippet: "agent = Orchestrator(); agent.run(query)"
+    section: "05_implementation"
+
+testing:
+  approach: "Unit tests per agent plus integration tests for the orchestration flow."
+
+documentation:
+  readme: "Project README describes setup, configuration, and the evaluation CLI."
