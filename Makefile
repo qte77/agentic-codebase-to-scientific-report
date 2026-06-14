@@ -146,8 +146,8 @@ setup_pdf_converter:  ## Setup PDF converter tools: pandoc, wkhtmltopdf
 
 lint: lint_md lint_sh  ## Run all linters (Markdown + shell)
 
-lint_md:  ## Lint Markdown with markdownlint-cli2
-	npx --yes markdownlint-cli2
+lint_md:  ## Lint Markdown with markdownlint-cli2 (rules: .markdownlint.jsonc)
+	npx --yes markdownlint-cli2 "**/*.md" "#node_modules" "#results" "#scripts/writeup/README.md"
 
 lint_sh:  ## Lint shell scripts with shellcheck (errors only)
 	shellcheck -S error scripts/writeup/*.sh scripts/test/*.sh

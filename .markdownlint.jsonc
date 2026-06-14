@@ -1,8 +1,9 @@
 {
   // Lenient markdown rules: structural correctness without style noise.
-  // Rules live here (not in .markdownlint-cli2.jsonc) so the org CI lint workflow
-  // uses this repo config instead of downloading the org default — keeping
-  // `make lint_md` and CI identical.
+  // Single markdownlint config (rules only). Globs/ignores are passed by
+  // `make lint_md` (Makefile), not a .markdownlint-cli2.jsonc. This file's
+  // existence also stops the org CI lint workflow from downloading its own config,
+  // so local and CI share these rules; `ci.yaml` runs `make lint_md` recursively.
   "default": true,
   "MD013": false, // line length
   "MD024": { "siblings_only": true }, // duplicate headings only flagged among siblings

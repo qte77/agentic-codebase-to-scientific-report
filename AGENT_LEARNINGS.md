@@ -14,18 +14,16 @@ aggressively.
 
 Entry template: **Context** / **Problem** / **Solution** / **Example** / **References**.
 
-## markdownlint passes locally but fails in CI
+## Docs with a front-matter title must start at H2
 
-- **Context:** adding or editing Markdown docs.
-- **Problem:** `make lint_md` uses the repo's lenient `.markdownlint-cli2.jsonc`, but
-  CI's reusable workflow downloads the stricter `qte77/.github` `.markdownlint.jsonc`.
-  Local green does not imply CI green.
-- **Solution:** any `docs/**` file with a front-matter `title:` must start its body at
-  `##` (no body `# H1`) — the front-matter title is the page title. Verify against the
-  org rules before pushing.
-- **Example:** temporarily drop the org `.markdownlint.jsonc` in place, run
-  `make lint_md`, expect 0 errors, then delete it (do not commit it).
-- **References:** `.markdownlint-cli2.jsonc`; CHANGELOG entry for the docs site.
+- **Context:** adding or editing Markdown docs that carry YAML front-matter.
+- **Problem:** default MD025 treats a front-matter `title:` as the document H1, so a
+  body `# H1` becomes a second top-level heading and fails the lint.
+- **Solution:** any doc with a front-matter `title:` starts its body at `##` — the
+  front-matter title is the page title. README/CHANGELOG (no front-matter) keep a body H1.
+- **Example:** `docs/architecture.md` — front-matter `title`, body opens `## System overview`.
+- **References:** `.markdownlint.jsonc` (single rules file). Globs live in `make lint_md`,
+  which `ci.yaml` runs recursively, so local `make lint_md` equals CI.
 
 ## main requires signed commits
 
