@@ -156,12 +156,13 @@ lint_sh:  ## Lint shell scripts with shellcheck (errors only)
 # MARK: Test
 
 
-test:  ## Validate the analysis.yaml schema contract (TDD: valid/ must pass, invalid/ must fail)
+test:  ## Validate analysis.yaml schema + agent-spec path conventions (TDD)
 	sh scripts/test/validate-schema.sh \
 		schema/analysis.schema.json \
 		tests/fixtures/valid \
 		tests/fixtures/invalid \
 		$(CHECK_JSONSCHEMA_VERSION)
+	sh scripts/test/check-spec-paths.sh .claude/agents
 
 
 # MARK: help
