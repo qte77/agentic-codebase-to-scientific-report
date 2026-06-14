@@ -1,0 +1,27 @@
+# INVALID: a citation's accessed_date is not ISO YYYY-MM-DD, which would corrupt
+# the access-date field of the generated BibTeX entry. Must be rejected (date
+# pattern guard). Otherwise valid, so rejection isolates the date constraint.
+schema_version: "1.0"
+project_summary:
+  title: "Bad Date Format"
+  abstract_summary: "Otherwise valid, but a citation accessed_date is not ISO YYYY-MM-DD."
+  keywords:
+    - dates
+repository_structure: {}
+architecture: {}
+tech_stack: {}
+dependencies: {}
+novel_contributions: []
+current_state: "Prototype."
+desired_state: "Documented."
+assets:
+  images: []
+  diagrams: []
+citation_sources:
+  - title: "PeerRead: A Dataset of Peer Reviews"
+    author: "Kang et al."
+    year: 2018
+    url: "https://github.com/allenai/PeerRead"
+    accessed_date: "June 14, 2026" # BUG: not YYYY-MM-DD
+    used_in_sections:
+      - "01_introduction"
