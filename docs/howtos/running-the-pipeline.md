@@ -7,8 +7,6 @@ created: 2026-06-14
 updated: 2026-06-14
 ---
 
-# Running the Pipeline
-
 See [Architecture](../architecture.md) for what each phase does.
 
 ## Prerequisites

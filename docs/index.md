@@ -7,8 +7,6 @@ created: 2026-06-14
 updated: 2026-06-14
 ---
 
-# Agentic Scientific Report Generator
-
 Transform any code repository into a structured, publication-ready scientific
 report using Claude subagents and academic writing standards.
 

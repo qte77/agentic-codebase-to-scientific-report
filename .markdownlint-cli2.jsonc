@@ -4,7 +4,6 @@
     "default": true,
     "MD013": false, // line length
     "MD024": { "siblings_only": true }, // duplicate headings only flagged among siblings
-    "MD025": { "front_matter_title": "" }, // docs/ use YAML front-matter title AND a body H1
     "MD029": false, // ordered list item prefix
     "MD033": false, // inline HTML (README/config use it intentionally)
     "MD036": false, // emphasis used as pseudo-heading (agent specs use **bold** labels)

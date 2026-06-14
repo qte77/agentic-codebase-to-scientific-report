@@ -7,8 +7,6 @@ created: 2026-06-14
 updated: 2026-06-14
 ---
 
-# User Story
-
 ## Problem statement
 
 Producing a comprehensive, publication-quality technical report about a codebase

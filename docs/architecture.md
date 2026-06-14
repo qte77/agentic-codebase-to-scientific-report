@@ -9,8 +9,6 @@ updated: 2026-06-14
 
 <!-- markdownlint-disable MD024 no-duplicate-heading -->
 
-# Architecture
-
 ## System overview
 
 The pipeline turns a target code repository into a ~52-page scientific report. It

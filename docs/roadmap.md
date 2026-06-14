@@ -7,8 +7,6 @@ created: 2026-06-14
 updated: 2026-06-14
 ---
 
-# Roadmap
-
 Architecture decisions live in [Architecture](architecture.md); this page tracks
 status and backlog.
 
