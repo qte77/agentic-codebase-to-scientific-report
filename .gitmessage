@@ -1,0 +1,25 @@
+#<--- 72 characters --------------------------------------------------->
+#
+# Conventional Commits — semantic messages for humans and machines
+# https://www.conventionalcommits.org/en/v1.0.0/
+# Types (Angular convention):
+# build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test
+#
+#<--- pattern --------------------------------------------------------->
+#
+# <type>[(scope)][!]: <description>
+#
+# ! after type/scope marks a breaking change
+#
+# [optional body]
+# - bullet points explaining what and why (not how)
+#
+# [optional footer(s)]
+# BREAKING CHANGE: ...
+# Refs: #123   Closes: #123
+# Co-Authored-By: Name <email>
+#
+#<--- usage ----------------------------------------------------------->
+# Enable locally:  git config commit.template .gitmessage
+#
+#<--- 72 characters --------------------------------------------------->
