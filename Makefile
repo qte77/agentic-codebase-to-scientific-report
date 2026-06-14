@@ -156,11 +156,11 @@ lint_sh:  ## Lint shell scripts with shellcheck (errors only)
 # MARK: Test
 
 
-test:  ## Validate the analysis.yaml schema contract (TDD: valid passes, invalid fails)
+test:  ## Validate the analysis.yaml schema contract (TDD: valid/ must pass, invalid/ must fail)
 	sh scripts/test/validate-schema.sh \
 		schema/analysis.schema.json \
-		tests/fixtures/analysis.valid.yaml \
-		tests/fixtures/analysis.invalid.yaml \
+		tests/fixtures/valid \
+		tests/fixtures/invalid \
 		$(CHECK_JSONSCHEMA_VERSION)
 
 

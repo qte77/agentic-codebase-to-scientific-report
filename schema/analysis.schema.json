@@ -104,7 +104,7 @@
             "required": ["path"],
             "additionalProperties": true,
             "properties": {
-              "path": { "type": "string", "description": "e.g. results/assets/images/Figure-01.png" },
+              "path": { "type": "string", "pattern": "^results/assets/", "description": "Must live under results/assets/ so pandoc resolves the figure; e.g. results/assets/images/Figure-01.png" },
               "caption": { "type": "string" },
               "section": { "type": "string" }
             }
@@ -117,7 +117,7 @@
             "required": ["path"],
             "additionalProperties": true,
             "properties": {
-              "path": { "type": "string", "description": "e.g. results/assets/diagrams/arch.puml" },
+              "path": { "type": "string", "pattern": "^results/assets/", "description": "Must live under results/assets/ so pandoc resolves the figure; e.g. results/assets/diagrams/arch.puml" },
               "caption": { "type": "string" },
               "section": { "type": "string" }
             }
@@ -160,8 +160,8 @@
         "required": ["source_path", "image_path", "caption", "section"],
         "additionalProperties": true,
         "properties": {
-          "source_path": { "type": "string", "description": "e.g. results/assets/diagrams/arch.puml" },
-          "image_path": { "type": "string", "description": "e.g. results/assets/images/Figure-01-arch.png" },
+          "source_path": { "type": "string", "pattern": "^results/assets/", "description": "Must live under results/assets/; e.g. results/assets/diagrams/arch.puml" },
+          "image_path": { "type": "string", "pattern": "^results/assets/", "description": "Must live under results/assets/; e.g. results/assets/images/Figure-01-arch.png" },
           "caption": { "type": "string" },
           "section": { "type": "string", "description": "Target report section, e.g. 04_planning_solution" }
         }

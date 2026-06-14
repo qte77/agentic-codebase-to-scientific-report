@@ -1,19 +1,20 @@
 #!/bin/sh
-# Validate the analysis.yaml schema contract (TDD harness).
+# TDD harness for the analysis.yaml schema contract.
 #
-# Asserts both directions of the contract:
-#   1. the valid fixture MUST validate against the schema (exit 0);
-#   2. the invalid fixture MUST be rejected (non-zero) — guards against a schema
-#      that silently accepts malformed analysis.yaml.
+# Every fixture under VALID_DIR MUST validate; every fixture under INVALID_DIR
+# MUST be rejected. Each invalid fixture encodes one realistic producer mistake
+# that would otherwise surface only on a real `make all` (bad asset path, bad
+# enum, missing nested-required field, schema-version drift), so the suite pins
+# the contract's discriminating behaviour rather than merely "is it parseable".
 #
 # Uses check-jsonschema (pinned) which safe-parses the YAML instance natively and
 # never executes its content. Prefers `pipx run` (isolated venv, sidesteps PEP 668);
 # falls back to a check-jsonschema already on PATH (e.g. pip --user install).
 set -eu
 
-SCHEMA=${1:?usage: validate-schema.sh SCHEMA VALID_FIXTURE INVALID_FIXTURE VERSION}
-VALID=${2:?missing valid fixture path}
-INVALID=${3:?missing invalid fixture path}
+SCHEMA=${1:?usage: validate-schema.sh SCHEMA VALID_DIR INVALID_DIR VERSION}
+VALID_DIR=${2:?missing valid fixtures dir}
+INVALID_DIR=${3:?missing invalid fixtures dir}
 VERSION=${4:?missing check-jsonschema version}
 
 # Select the runner once, then reuse it via "$@".
@@ -27,18 +28,39 @@ else
 	exit 127
 fi
 
-# 1. Valid fixture MUST validate.
-if ! "$@" --schemafile "$SCHEMA" "$VALID"; then
-	echo "FAIL: valid fixture did not validate: $VALID" >&2
+rc=0
+seen=0
+
+# Every valid fixture MUST validate.
+for f in "$VALID_DIR"/*.yaml; do
+	[ -e "$f" ] || continue
+	seen=$((seen + 1))
+	if "$@" --schemafile "$SCHEMA" "$f" >/dev/null 2>&1; then
+		echo "ok  : valid    accepted  $f"
+	else
+		echo "FAIL: valid    rejected  $f" >&2
+		rc=1
+	fi
+done
+
+# Every invalid fixture MUST be rejected.
+for f in "$INVALID_DIR"/*.yaml; do
+	[ -e "$f" ] || continue
+	seen=$((seen + 1))
+	if "$@" --schemafile "$SCHEMA" "$f" >/dev/null 2>&1; then
+		echo "FAIL: invalid  accepted  $f" >&2
+		rc=1
+	else
+		echo "ok  : invalid  rejected  $f"
+	fi
+done
+
+if [ "$seen" -eq 0 ]; then
+	echo "FAIL: no fixtures found under $VALID_DIR or $INVALID_DIR" >&2
 	exit 1
 fi
-echo "ok: valid fixture validates against $SCHEMA"
-
-# 2. Invalid fixture MUST be rejected.
-if "$@" --schemafile "$SCHEMA" "$INVALID" >/dev/null 2>&1; then
-	echo "FAIL: invalid fixture unexpectedly validated: $INVALID" >&2
+if [ "$rc" -ne 0 ]; then
+	echo "FAIL: analysis.yaml schema contract ($seen fixtures checked)" >&2
 	exit 1
 fi
-echo "ok: invalid fixture correctly rejected: $INVALID"
-
-echo "PASS: analysis.yaml schema contract verified"
+echo "PASS: analysis.yaml schema contract ($seen fixtures checked)"

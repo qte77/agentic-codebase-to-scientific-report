@@ -1,0 +1,27 @@
+# INVALID: a citation's _confidence is outside the EXTRACTED/INFERRED enum that
+# the validator relies on for Truthfulness scoring. Must be rejected (enum guard).
+schema_version: "1.0"
+project_summary:
+  title: "Bad Confidence Enum"
+  abstract_summary: "Otherwise valid, but a citation carries an out-of-enum _confidence."
+  keywords:
+    - citations
+repository_structure: {}
+architecture: {}
+tech_stack: {}
+dependencies: {}
+novel_contributions: []
+current_state: "Prototype."
+desired_state: "Documented."
+assets:
+  images: []
+  diagrams: []
+citation_sources:
+  - title: "PeerRead: A Dataset of Peer Reviews"
+    author: "Kang et al."
+    year: 2018
+    url: "https://github.com/allenai/PeerRead"
+    accessed_date: "2026-06-14"
+    used_in_sections:
+      - "01_introduction"
+    _confidence: "MAYBE" # BUG: not EXTRACTED or INFERRED

@@ -1,0 +1,21 @@
+# Minimal VALID instance: only the schema's required keys, every optional key
+# omitted, optional arrays empty. Proves the contract floor — the analyzer is NOT
+# forced to emit optional sections, and an empty asset/citation set still validates.
+# Fails if any optional key is ever mistakenly promoted to required.
+schema_version: "1.0"
+project_summary:
+  title: "Minimal Report"
+  abstract_summary: "A minimal but conforming analysis instance."
+  keywords:
+    - minimal
+repository_structure: {}
+architecture: {}
+tech_stack: {}
+dependencies: {}
+novel_contributions: []
+current_state: "Prototype."
+desired_state: "Documented."
+assets:
+  images: []
+  diagrams: []
+citation_sources: []
