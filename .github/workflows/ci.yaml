@@ -31,5 +31,8 @@ jobs:
       - name: Lint shell scripts
         run: make lint_sh
 
+      - name: Validate analysis.yaml schema contract (TDD)
+        run: make test
+
       - name: Validate pipeline Makefile (dry-run, no LLM cost)
         run: make -n all
