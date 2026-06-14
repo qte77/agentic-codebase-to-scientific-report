@@ -11,9 +11,9 @@ PDF generation and diagram rendering scripts for the project writeup.
 ## Usage
 
 ```bash
-make pandoc_run          # Convert writeup to PDF (see make pandoc_run HELP=1)
-make writeup             # Full writeup pipeline with title page
-make setup_pdf_converter CONVERTER=pandoc
+make pandoc_run                        # Convert results/sections/*.md to results/report.pdf
+make setup_pdf_converter ARGS=pandoc   # Install pandoc + texlive
+make run_puml_single INPUT_FILE=d.puml STYLE= OUTPUT_PATH=out.png  # Render one diagram
 ```
 
 ## Known Gotchas
@@ -36,11 +36,13 @@ not inside — catcode changes only affect future tokenization.
 
 Relevant: `run-pandoc.sh:292-296`
 
-### `make writeup` — Title Page Not Appearing
+### Title Page Not Appearing
 
-`00_title_abstract.tex` must be passed explicitly via `TITLE_PAGE=` to the
-`pandoc_run` sub-make. Pandoc does not auto-discover files by naming convention.
+`00_title_abstract.tex` must be passed explicitly to `run-pandoc.sh` as the
+`-B` (before-body) include. Pandoc does not auto-discover files by naming
+convention. The `pandoc_run` target wires it as a positional argument:
 
 ```makefile
-$(MAKE) pandoc_run TITLE_PAGE="$(WRITEUP_DIR)/00_title_abstract.tex" ...
+# Makefile:58
+$(PANDOC_SCRIPT) "$(WRITEUP_DIR)/*.md" "$(OUTPUT_PDF)" "$(WRITEUP_DIR)/00_title_abstract.tex" ...
 ```
