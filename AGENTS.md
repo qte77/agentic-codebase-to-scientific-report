@@ -26,7 +26,7 @@ Use the **validator** subagent to ensure quality, accuracy, and academic complia
 
 - `results/repo-context.xml` - Repomix bundle of the target repository
 - `results/graph.json` - Graphify knowledge graph (optional)
-- `results/sections/analysis.yaml` - Repository technical analysis
+- `results/sections/analysis.yaml` - Repository technical analysis (conforms to `schema/analysis.schema.json`; validated by `make test`)
 - `results/sections/00_frontmatter.md`, `00_title_abstract.tex`, `01_*.md` .. `08_*.md`, `references.bib` - Pandoc-ready report sections
 - `results/validation-report.md` - Quality assessment with CHT scores
 - `results/assets/` - Processed diagrams and documentation
@@ -34,7 +34,7 @@ Use the **validator** subagent to ensure quality, accuracy, and academic complia
 
 ## Automation Features
 
-Makefile orchestration available with `make analyze`, `make synthesize`, `make validate` for batch execution.
+Makefile orchestration available with `make analyze`, `make synthesize`, `make validate` for batch execution. `make test` validates the `analysis.yaml` schema contract (`schema/analysis.schema.json`) and agent-spec path conventions; `make lint` runs Markdown + shell linting.
 
 ### Phase 4: PDF Assembly
 
