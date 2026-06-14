@@ -2,7 +2,7 @@
 
 .SILENT:
 .ONESHELL:
-.PHONY: all analyze synthesize validate repo_ingest pandoc_run create_struct clean_struct setup_claude_code lint lint_md lint_sh help
+.PHONY: all analyze synthesize validate repo_ingest pandoc_run create_struct clean_struct setup_claude_code test lint lint_md lint_sh help
 .DEFAULT_GOAL := help
 
 
@@ -17,6 +17,9 @@ TARGET_BRANCH := $(shell grep -m1 -E '^Branch:' config/sources.md | sed -E 's/^B
 GRAPHIFY ?= graphify
 GRAPHIFY_BACKEND ?= claude
 REPOMIX_VERSION ?= 1.14.1
+
+# Schema-contract validation tool (Phase test); pinned, run via pipx.
+CHECK_JSONSCHEMA_VERSION ?= 0.31.2
 
 # PDF / pandoc conversion (scripts reused from Agents-eval).
 PANDOC_SCRIPT := scripts/writeup/run-pandoc.sh
@@ -147,7 +150,18 @@ lint_md:  ## Lint Markdown with markdownlint-cli2
 	npx --yes markdownlint-cli2
 
 lint_sh:  ## Lint shell scripts with shellcheck (errors only)
-	shellcheck -S error scripts/writeup/*.sh
+	shellcheck -S error scripts/writeup/*.sh scripts/test/*.sh
+
+
+# MARK: Test
+
+
+test:  ## Validate the analysis.yaml schema contract (TDD: valid passes, invalid fails)
+	sh scripts/test/validate-schema.sh \
+		schema/analysis.schema.json \
+		tests/fixtures/analysis.valid.yaml \
+		tests/fixtures/analysis.invalid.yaml \
+		$(CHECK_JSONSCHEMA_VERSION)
 
 
 # MARK: help
