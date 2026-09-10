@@ -1,6 +1,6 @@
 # Plan: drop MkDocs; keep docs/ as GitHub-rendered
 
-**Status:** open · **Tracking:** #23
+**Status:** PR open (`chore/drop-mkdocs` branch) · **Tracking:** #23
 
 ## Rationale
 

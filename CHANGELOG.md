@@ -19,8 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Agent-spec path-convention guard (`scripts/test/check-spec-paths.sh`) wired into
   `make test`.
 - Apache-2.0 `LICENSE` and a Conventional Commits `.gitmessage` template.
-- Documentation site under `docs/` (architecture, user story, roadmap, how-tos)
-  with `mkdocs.yaml`.
+- Documentation under `docs/` (architecture, user story, roadmap, how-tos).
 - `CONTRIBUTING.md` with the Documentation Hierarchy authority map; `AGENT_LEARNINGS.md`
   and `AGENT_REQUESTS.md` (knowledge + escalation).
 - CodeQL workflow analysing the GitHub Actions workflows, and issue templates.
@@ -42,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Empty CSL stubs (`apa.csl`, `chicago-author-date.csl`); CI actionlint step.
+- `mkdocs.yaml` — MkDocs site dropped; `docs/` stays GitHub-rendered (#23).
 
 ### Fixed
 

@@ -20,11 +20,14 @@ guessing. Format: `- [ ] [PRIORITY] Description` with Context / Action / Impact.
   - **Impact:** validates the full producer → consumer → PDF flow; may surface a
     first iteration on `analysis.yaml` content.
   - **Plan:** [docs/plans/first-end-to-end-run.md](docs/plans/first-end-to-end-run.md).
-- [ ] [MEDIUM] Enable "Require approval for first-time contributors".
-  - **Context:** Settings → Actions → General; UI-only, no clean API.
-  - **Action:** maintainer toggles it (org-wide fix also covers it).
-  - **Impact:** prevents untrusted first-time-contributor workflow runs.
 
 ## Resolved
 
 <!-- Move items here with the resolving PR/commit when closed. -->
+
+- [x] [MEDIUM] Enable "Require approval for first-time contributors".
+  - **Context:** Settings → Actions → General; UI-only, no clean API.
+  - **Resolution:** verified via
+    `gh api repos/qte77/agentic-codebase-to-scientific-report/actions/permissions/fork-pr-contributor-approval`,
+    which returned `approval_policy: first_time_contributors` (checked 2026-09-10) —
+    already enabled org-wide, mirroring the same check already done on issue #5.
