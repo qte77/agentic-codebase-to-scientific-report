@@ -12,13 +12,10 @@
 
 - Points at a code repository and produces a structured, citation-backed
   scientific report draft — architecture, implementation, evaluation, and outlook
-- Starts you from a structured draft instead of a blank page, not a bare summary
 - Grounds every technical claim in the actual repository code and docs, so the
   report is accurate and traceable
 - Scores each section for completeness, helpfulness, and truthfulness before
   assembly, so you can trust the draft before reading it in full
-- Validates the producer/consumer data contract in CI, so a pipeline change
-  can't silently break report generation
 - Runs as Claude Code subagents in phases: ingest → analyze → synthesize →
   validate → assemble
 - Assembles to `results/report.pdf` via pandoc/XeLaTeX with IEEE citations
@@ -41,12 +38,11 @@ prerequisites and execution methods:
 
 ## Why
 
-Producing a comprehensive, publication-quality technical report about a
-codebase is normally slow and manual: someone has to read the repository,
-reconstruct its architecture, summarise decisions and results, and format
-everything to academic standards — hours of expert effort per project, even
+Producing a publication-quality technical report about a codebase is normally
+hours of manual expert work — reading the repo, reconstructing its
+architecture, and formatting everything to academic standards by hand — even
 though the knowledge already exists in the code, docs, and history. This
-pipeline is different: purpose-built Claude subagents extract a
+pipeline automates that: purpose-built Claude subagents extract a
 schema-validated analysis, synthesize it into cited academic sections, and
 cross-check every claim against the source before assembly. More in
 [docs/UserStory.md](docs/UserStory.md).
