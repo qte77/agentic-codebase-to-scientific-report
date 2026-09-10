@@ -41,7 +41,7 @@ and execution methods are in
 ```bash
 ├── .claude/agents/          # Subagent definitions (repo-analyzer, section-synthesizer, validator)
 ├── config/                  # Pipeline inputs (sources, targets, analysis/synthesis overrides)
-├── docs/                    # MkDocs reference site (architecture, user story, roadmap, how-tos)
+├── docs/                    # Reference docs (architecture, user story, roadmap, how-tos)
 ├── schema/                  # Canonical analysis.yaml JSON Schema contract
 ├── scripts/
 │   ├── writeup/             # Reused pandoc/PlantUML PDF tooling
@@ -51,7 +51,6 @@ and execution methods are in
 ├── AGENTS.md                # Agent operating contract
 ├── CONTRIBUTING.md          # Developer workflow + documentation hierarchy
 ├── CHANGELOG.md             # Version history
-├── mkdocs.yaml              # Documentation site config
 └── Makefile                 # Pipeline automation
 ```
 

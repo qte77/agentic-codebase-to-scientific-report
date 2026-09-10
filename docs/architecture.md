@@ -1,11 +1,12 @@
 ---
-title: Architecture
 description: Pipeline architecture, phases, the analysis.yaml contract, and the report model
 category: architecture
 version: 0.1.0
 created: 2026-06-14
 updated: 2026-06-14
 ---
+
+# Architecture
 
 <!-- markdownlint-disable MD024 no-duplicate-heading -->
 

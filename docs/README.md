@@ -1,5 +1,4 @@
 ---
-title: Agentic Scientific Report Generator
 description: Documentation home for the codebase-to-scientific-report pipeline
 category: home
 version: 0.1.0
@@ -7,10 +6,12 @@ created: 2026-06-14
 updated: 2026-06-14
 ---
 
+# Agentic Scientific Report Generator
+
 Transform any code repository into a structured, publication-ready scientific
 report using Claude subagents and academic writing standards.
 
-This site is the reference documentation. For a quick start and installation, see
+This page is the reference documentation. For a quick start and installation, see
 the project [README](https://github.com/qte77/agentic-codebase-to-scientific-report#readme).
 
 ## Documentation map

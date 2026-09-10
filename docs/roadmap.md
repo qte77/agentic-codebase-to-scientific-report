@@ -1,11 +1,12 @@
 ---
-title: Roadmap
 description: Delivered milestones, planned work, and deferred items
 category: roadmap
 version: 0.1.0
 created: 2026-06-14
 updated: 2026-06-14
 ---
+
+# Roadmap
 
 Architecture decisions live in [Architecture](architecture.md); this page tracks
 status and backlog.
@@ -23,7 +24,7 @@ status and backlog.
 | First real `make all` on a live target | Pending | needs Claude auth + API key; [plan](plans/first-end-to-end-run.md) |
 | GitHub API access for remote repos | Planned | currently local/cloned paths |
 | Optional `asset-processor` / `bibliography-curator` agents | Planned | in `.claude/agents/TODO/` |
-| MkDocs site | Dropping | keep docs/ GitHub-rendered; [plan](plans/drop-mkdocs.md) (#23) |
+| MkDocs site | Dropped | `docs/` stays GitHub-rendered; see [plan](plans/drop-mkdocs.md) (#23) |
 
 ## Backlog
 
@@ -34,5 +35,3 @@ Detailed plans for open items live under `docs/plans/`.
   [plans/first-end-to-end-run.md](plans/first-end-to-end-run.md).
 - **Promote the TODO agents** (`asset-processor`, `bibliography-curator`): their
   output paths are aligned, but they are not yet wired into `make all`.
-- **Drop MkDocs**, keeping `docs/` GitHub-rendered — see
-  [plans/drop-mkdocs.md](plans/drop-mkdocs.md).

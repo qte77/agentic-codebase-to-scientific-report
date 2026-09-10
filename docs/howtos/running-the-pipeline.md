@@ -1,11 +1,12 @@
 ---
-title: Running the Pipeline
 description: Prerequisites, execution methods, and phase controls for generating a report
 category: usage-guide
 version: 0.1.0
 created: 2026-06-14
 updated: 2026-06-14
 ---
+
+# Running the Pipeline
 
 See [Architecture](../architecture.md) for what each phase does.
 

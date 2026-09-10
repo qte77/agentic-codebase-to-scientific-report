@@ -1,11 +1,12 @@
 ---
-title: User Story
 description: Who the pipeline is for, the value it delivers, and its acceptance criteria
 category: requirements
 version: 0.1.0
 created: 2026-06-14
 updated: 2026-06-14
 ---
+
+# User Story
 
 ## Problem statement
 
