@@ -4,23 +4,23 @@
 > publication-ready scientific report using Claude subagents and academic writing
 > standards.
 
-## Purpose
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
+[![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-blue.svg)](CHANGELOG.md)
+[![CI](https://github.com/qte77/agentic-codebase-to-scientific-report/actions/workflows/ci.yaml/badge.svg)](https://github.com/qte77/agentic-codebase-to-scientific-report/actions/workflows/ci.yaml)
 
-Point the pipeline at a repository and get a structured, citation-backed report
-draft: architecture, implementation, evaluation, and outlook, assembled to a
-consistent academic format and quality-scored before assembly.
+## What
 
-## Documentation
+- Points at a code repository and produces a structured, citation-backed
+  scientific report draft — architecture, implementation, evaluation, and outlook
+- Grounds every technical claim in the actual repository code and docs, so the
+  report is accurate and traceable
+- Scores each section for completeness, helpfulness, and truthfulness before
+  assembly, so you can trust the draft before reading it in full
+- Runs as Claude Code subagents in phases: ingest → analyze → synthesize →
+  validate → assemble
+- Assembles to `results/report.pdf` via pandoc/XeLaTeX with IEEE citations
 
-- **Users / researchers** — [What it produces and who it is for](docs/UserStory.md)
-  · [Run the pipeline](docs/howtos/running-the-pipeline.md)
-- **Developers** — [Contributing](CONTRIBUTING.md) ·
-  [Architecture](docs/architecture.md) · [Roadmap](docs/roadmap.md) ·
-  [Changelog](CHANGELOG.md)
-- **AI agents** — [AGENTS.md](AGENTS.md) (operating contract) ·
-  [Learnings](AGENT_LEARNINGS.md) · [Requests](AGENT_REQUESTS.md)
-
-## Quick start
+## How
 
 1. Configure your target repository and report references in `config/` — see
    [config/README.md](config/README.md).
@@ -32,36 +32,32 @@ make create_struct         # Initialize the results/ directories
 make all                   # ingest → analyze → synthesize → validate → PDF
 ```
 
-`make all` needs Claude CLI auth + an API key and spends tokens. Full prerequisites
-and execution methods are in
+`make all` needs Claude CLI auth + an API key and spends tokens. Full
+prerequisites and execution methods:
 [Running the Pipeline](docs/howtos/running-the-pipeline.md).
 
-## Project structure
+## Why
 
-```bash
-├── .claude/agents/          # Subagent definitions (repo-analyzer, section-synthesizer, validator)
-├── config/                  # Pipeline inputs (sources, targets, analysis/synthesis overrides)
-├── docs/                    # Reference docs (architecture, user story, roadmap, how-tos)
-├── schema/                  # Canonical analysis.yaml JSON Schema contract
-├── scripts/
-│   ├── writeup/             # Reused pandoc/PlantUML PDF tooling
-│   └── test/                # Schema + agent-spec path validation (make test)
-├── tests/fixtures/          # valid/ + invalid/ schema fixtures (TDD)
-├── results/                 # Generated outputs (gitignored): analysis.yaml, sections, report.pdf
-├── AGENTS.md                # Agent operating contract
-├── CONTRIBUTING.md          # Developer workflow + documentation hierarchy
-├── CHANGELOG.md             # Version history
-└── Makefile                 # Pipeline automation
-```
+Producing a publication-quality technical report about a codebase is normally
+hours of manual expert work — reading the repo, reconstructing its
+architecture, and formatting everything to academic standards by hand — even
+though the knowledge already exists in the code, docs, and history. This
+pipeline automates that: purpose-built Claude subagents extract a
+schema-validated analysis, synthesize it into cited academic sections, and
+cross-check every claim against the source before assembly. More in
+[docs/UserStory.md](docs/UserStory.md).
 
-## Development
+## Refs
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow. Common checks:
-
-```bash
-make lint                  # Markdown + shell lint
-make test                  # Validate the analysis.yaml schema contract + agent-spec paths
-```
+- [docs/UserStory.md](docs/UserStory.md) — problem statement and target users
+- [docs/architecture.md](docs/architecture.md) — pipeline, subagents, and
+  report model
+- [docs/howtos/running-the-pipeline.md](docs/howtos/running-the-pipeline.md) —
+  full run guide
+- [docs/roadmap.md](docs/roadmap.md) — what shipped and what's next
+- [AGENTS.md](AGENTS.md) — agent operating contract
+- [CONTRIBUTING.md](CONTRIBUTING.md) — dev workflow, testing, commit conventions
+- [CHANGELOG.md](CHANGELOG.md) — version history
 
 ## License
 

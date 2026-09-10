@@ -38,6 +38,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   duplicated execution/output sections (now owned by `docs/` and `AGENTS.md`).
 - Consolidated Markdown linting to a single `.markdownlint.jsonc`, run recursively in
   CI so `make lint_md` matches CI.
+- Restructured `README.md` to the qte77 README doc-structure canon:
+  `## Purpose` → `## What` (rewritten as tight bullets),
+  `## Quick start` → `## How`,
+  `## Documentation` → `## Refs` (links only, repositioned after `## Why`);
+  added a `## Why` section and a License/Version/CI badges row; moved
+  `## Project structure` into `CONTRIBUTING.md` and dropped the
+  `## Development` pointer section, now covered by CONTRIBUTING's own Quick
+  commands table (#28).
 
 ### Removed
 
