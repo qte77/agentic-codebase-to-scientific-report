@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pinned GitHub Actions to release SHAs; reduced default `GITHUB_TOKEN` scope.
 - `analyze` no longer double-loads the ingested context into the prompt.
 - Reduced `CLAUDE.md` to a clean `@AGENTS.md` shim.
+- `CLAUDE.md` is now a symlink to `AGENTS.md` (cross-tool agent-instructions standard) (#26).
 - Restructured `AGENTS.md` into the agent governance + orchestration contract.
 - Restructured `README.md` as an audience-segmented navigation hub, removing the
   duplicated execution/output sections (now owned by `docs/` and `AGENTS.md`).
