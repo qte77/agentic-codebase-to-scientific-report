@@ -71,7 +71,11 @@ Anti-redundancy rules:
 - **Squash-only merges** — `main` accepts squash merges only, with a hand-written
   subject/body.
 - **Signed commits required** — `main` enforces a signed-commit ruleset; merges land
-  a GitHub-signed squash commit.
+  a GitHub-signed squash commit. A local `git commit` from an environment without
+  a signing key is unsigned and its PR cannot merge regardless of CI; see
+  `AGENT_LEARNINGS.md` → "Creating signed commits via the GitHub API (no local
+  GPG key)" for the `createCommitOnBranch` workflow that produces a signed
+  commit instead.
 - **Green CI gate** — gitleaks, `make lint_sh`, `make test`, the Makefile dry-run,
   markdown + link lint, and CodeFactor must pass before merge.
 
