@@ -12,14 +12,15 @@
 
 - Points at a code repository and produces a structured, citation-backed
   scientific report draft — architecture, implementation, evaluation, and outlook
+- Starts you from a structured draft instead of a blank page, not a bare summary
+- Grounds every technical claim in the actual repository code and docs, so the
+  report is accurate and traceable
+- Scores each section for completeness, helpfulness, and truthfulness before
+  assembly, so you can trust the draft before reading it in full
+- Validates the producer/consumer data contract in CI, so a pipeline change
+  can't silently break report generation
 - Runs as Claude Code subagents in phases: ingest → analyze → synthesize →
   validate → assemble
-- `repo-analyzer` extracts technical facts into a schema-validated
-  `analysis.yaml` contract
-- `section-synthesizer` turns that contract into pandoc-ready report sections
-  and a `references.bib`
-- `validator` cross-checks every section against the analysis and repo graph,
-  scoring completeness, helpfulness, and truthfulness before assembly
 - Assembles to `results/report.pdf` via pandoc/XeLaTeX with IEEE citations
 
 ## How
@@ -40,19 +41,21 @@ prerequisites and execution methods:
 
 ## Why
 
-Turning a codebase into a publication-quality technical report is normally
-hours of expert manual work — reading the repo, reconstructing its
-architecture, and formatting everything to academic standards by hand. Generic
-repo-summarizer tools produce a flat prose blob with no structure, citations,
-or accuracy check. This pipeline is different: purpose-built Claude subagents
-extract a schema-validated analysis, synthesize it into cited academic
-sections, and cross-check every claim against the source before assembly. More
-in [docs/UserStory.md](docs/UserStory.md).
+Producing a comprehensive, publication-quality technical report about a
+codebase is normally slow and manual: someone has to read the repository,
+reconstruct its architecture, summarise decisions and results, and format
+everything to academic standards — hours of expert effort per project, even
+though the knowledge already exists in the code, docs, and history. This
+pipeline is different: purpose-built Claude subagents extract a
+schema-validated analysis, synthesize it into cited academic sections, and
+cross-check every claim against the source before assembly. More in
+[docs/UserStory.md](docs/UserStory.md).
 
 ## Refs
 
 - [docs/UserStory.md](docs/UserStory.md) — problem statement and target users
-- [docs/architecture.md](docs/architecture.md) — pipeline and report model
+- [docs/architecture.md](docs/architecture.md) — pipeline, subagents, and
+  report model
 - [docs/howtos/running-the-pipeline.md](docs/howtos/running-the-pipeline.md) —
   full run guide
 - [docs/roadmap.md](docs/roadmap.md) — what shipped and what's next
