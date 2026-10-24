@@ -4,7 +4,7 @@ description: Developer workflow, commands, testing, and the documentation author
 category: contributing
 version: 0.1.0
 created: 2026-06-14
-updated: 2026-06-14
+updated: 2026-09-10
 ---
 
 Technical standards for humans and AI agents. For AI behavioral rules and pipeline
@@ -20,6 +20,24 @@ orchestration see `AGENTS.md`; for the project overview see the
 | `make all` | Full pipeline (ingest → analyze → synthesize → validate → PDF) |
 | `make lint` | Markdown + shell lint |
 | `make test` | Validate the `analysis.yaml` schema contract + agent-spec path conventions |
+
+## Project structure
+
+```bash
+├── .claude/agents/          # Subagent definitions (repo-analyzer, section-synthesizer, validator)
+├── config/                  # Pipeline inputs (sources, targets, analysis/synthesis overrides)
+├── docs/                    # Reference docs (architecture, user story, roadmap, how-tos)
+├── schema/                  # Canonical analysis.yaml JSON Schema contract
+├── scripts/
+│   ├── writeup/             # Reused pandoc/PlantUML PDF tooling
+│   └── test/                # Schema + agent-spec path validation (make test)
+├── tests/fixtures/          # valid/ + invalid/ schema fixtures (TDD)
+├── results/                 # Generated outputs (gitignored): analysis.yaml, sections, report.pdf
+├── AGENTS.md                # Agent operating contract
+├── CONTRIBUTING.md          # Developer workflow + documentation hierarchy
+├── CHANGELOG.md             # Version history
+└── Makefile                 # Pipeline automation
+```
 
 ## Development environment
 
