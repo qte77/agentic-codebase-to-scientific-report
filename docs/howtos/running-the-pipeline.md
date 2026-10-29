@@ -51,6 +51,14 @@ make all SKIP_GRAPHIFY=1
 
 `SKIP_ANALYZE`, `SKIP_SYNTHESIZE`, and `SKIP_VALIDATE` behave the same way.
 
+Phase 0 keeps run-history logs and generated SBOMs out of the Repomix pack via
+`REPOMIX_IGNORE` (comma-separated globs relative to the target root; default
+`results/runs/**,docs/SBOM/**`). Override it per target:
+
+```bash
+make repo_ingest REPOMIX_IGNORE='results/runs/**,docs/SBOM/**,data/**'
+```
+
 ## Verifying a change
 
 ```bash
