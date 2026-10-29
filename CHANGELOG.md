@@ -46,6 +46,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `## Project structure` into `CONTRIBUTING.md` and dropped the
   `## Development` pointer section, now covered by CONTRIBUTING's own Quick
   commands table (#28).
+- `make repo_ingest` keeps run-history logs and generated SBOMs out of the
+  Repomix pack (`REPOMIX_IGNORE`, default `results/runs/**,docs/SBOM/**`) (#37).
+- `analysis.yaml` contract `1.1`: the new required `graph_available` key flags
+  reports built without the Graphify graph (#30).
 
 ### Removed
 
@@ -57,6 +61,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - TODO-agent output paths aligned to `results/assets/` and
   `results/sections/references.bib`.
 - Stale Makefile target references in `scripts/writeup/README.md`.
+- `make test` (and every recipe) fails when any command fails, not only the
+  last one (`.SHELLFLAGS := -ec`), with a fail-closed regression guard (#35).
+- `make repo_ingest` fails when the target clone is not on the `Branch:` named
+  in `config/sources.md` instead of packing whatever is checked out (#36).
 
 ### Security
 
