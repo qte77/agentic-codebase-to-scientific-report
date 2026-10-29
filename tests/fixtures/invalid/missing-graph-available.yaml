@@ -1,0 +1,20 @@
+# INVALID: graph_available is omitted. The producer must record whether the
+# Graphify knowledge graph (results/graph.json) was present, so a report built
+# from Repomix text alone is flagged instead of silently degraded (#30).
+schema_version: "1.1"
+project_summary:
+  title: "Report Without Graph State"
+  abstract_summary: "Otherwise valid, but does not say whether a graph was available."
+  keywords:
+    - graph
+repository_structure: {}
+architecture: {}
+tech_stack: {}
+dependencies: {}
+novel_contributions: []
+current_state: "Prototype."
+desired_state: "Documented."
+assets:
+  images: []
+  diagrams: []
+citation_sources: []

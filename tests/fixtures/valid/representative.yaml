@@ -1,7 +1,8 @@
 # Representative VALID analysis.yaml instance (TDD fixture).
 # Must conform to schema/analysis.schema.json. Synthetic data only — no secrets.
 # Modeled loosely on the Agents-eval target (PydanticAI MAS, BERTScore, PeerRead).
-schema_version: "1.0"
+schema_version: "1.1"
+graph_available: true
 
 project_summary:
   title: "Evaluating a Multi-Agent System for Scientific Peer Review"

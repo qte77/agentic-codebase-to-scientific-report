@@ -44,7 +44,11 @@ the single source of truth for the keys, and is enforced by `make test`:
 - asset paths must use the `results/assets/` prefix (so pandoc resolves figures);
 - `date` / `accessed_date` must be ISO `YYYY-MM-DD`;
 - `citation_sources[]._confidence` carries `EXTRACTED`/`INFERRED` provenance from
-  `graph.json` for the validator's truthfulness scoring.
+  `graph.json` for the validator's truthfulness scoring;
+- `graph_available` (required, since `schema_version` 1.1) records whether
+  `graph.json` existed at analysis time. Graphify stays optional, but a report
+  built from the Repomix text alone is flagged: `false` tells the synthesizer to
+  state the limitation and the validator not to expect graph-backed claims.
 
 ## Report model
 
