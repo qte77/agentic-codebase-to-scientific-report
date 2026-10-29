@@ -2,6 +2,9 @@
 
 .SILENT:
 .ONESHELL:
+# .ONESHELL runs each recipe as one script; -e makes any failing command fail the
+# recipe instead of only the last one (#35).
+.SHELLFLAGS := -ec
 .PHONY: all analyze synthesize validate repo_ingest pandoc_run create_struct clean_struct setup_claude_code test lint lint_md lint_sh help
 .DEFAULT_GOAL := help
 
@@ -156,13 +159,17 @@ lint_sh:  ## Lint shell scripts with shellcheck (errors only)
 # MARK: Test
 
 
+TEST_VALID_DIR ?= tests/fixtures/valid
+TEST_INVALID_DIR ?= tests/fixtures/invalid
+
 test:  ## Validate analysis.yaml schema + agent-spec path conventions (TDD)
 	sh scripts/test/validate-schema.sh \
 		schema/analysis.schema.json \
-		tests/fixtures/valid \
-		tests/fixtures/invalid \
+		$(TEST_VALID_DIR) \
+		$(TEST_INVALID_DIR) \
 		$(CHECK_JSONSCHEMA_VERSION)
 	sh scripts/test/check-spec-paths.sh .claude/agents
+	[ -n "$(TEST_INNER)" ] || sh scripts/test/check-make-fails-closed.sh $(TEST_INVALID_DIR)
 
 
 # MARK: help
