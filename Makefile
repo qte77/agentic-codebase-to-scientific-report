@@ -20,6 +20,9 @@ TARGET_BRANCH := $(shell grep -m1 -E '^Branch:' config/sources.md | sed -E 's/^B
 GRAPHIFY ?= graphify
 GRAPHIFY_BACKEND ?= claude
 REPOMIX_VERSION ?= 1.14.1
+# Comma-separated globs (relative to the target root) kept out of the pack:
+# run-history logs and generated SBOMs carry no analytical value (#37).
+REPOMIX_IGNORE ?= results/runs/**,docs/SBOM/**
 
 # Schema-contract validation tool (Phase test); pinned, run via pipx.
 CHECK_JSONSCHEMA_VERSION ?= 0.31.2
@@ -66,7 +69,7 @@ pandoc_run:  ## Convert validated sections to PDF via pandoc/XeLaTeX (Phase 4)
 
 repo_ingest: create_struct check_target_branch  ## Ingest target repo via Repomix + Graphify (Phase 0)
 	echo "Ingesting target repo: $(TARGET_REPO) (branch $(TARGET_BRANCH)) ..."
-	npx --yes repomix@$(REPOMIX_VERSION) "$(TARGET_REPO)" --compress --output results/repo-context.xml
+	npx --yes repomix@$(REPOMIX_VERSION) "$(TARGET_REPO)" --compress --ignore "$(REPOMIX_IGNORE)" --output results/repo-context.xml
 	if [ -z "$(SKIP_GRAPHIFY)" ]; then
 	    if command -v $(GRAPHIFY) >/dev/null 2>&1; then
 	        echo "Building Graphify knowledge graph (backend: $(GRAPHIFY_BACKEND)) ..."
