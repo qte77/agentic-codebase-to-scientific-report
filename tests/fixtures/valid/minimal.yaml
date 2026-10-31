@@ -2,7 +2,8 @@
 # omitted, optional arrays empty. Proves the contract floor — the analyzer is NOT
 # forced to emit optional sections, and an empty asset/citation set still validates.
 # Fails if any optional key is ever mistakenly promoted to required.
-schema_version: "1.0"
+schema_version: "1.1"
+graph_available: false
 project_summary:
   title: "Minimal Report"
   abstract_summary: "A minimal but conforming analysis instance."

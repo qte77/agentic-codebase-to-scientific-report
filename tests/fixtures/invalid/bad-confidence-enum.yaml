@@ -1,6 +1,7 @@
 # INVALID: a citation's _confidence is outside the EXTRACTED/INFERRED enum that
 # the validator relies on for Truthfulness scoring. Must be rejected (enum guard).
-schema_version: "1.0"
+schema_version: "1.1"
+graph_available: true
 project_summary:
   title: "Bad Confidence Enum"
   abstract_summary: "Otherwise valid, but a citation carries an out-of-enum _confidence."

@@ -1,7 +1,8 @@
-# INVALID: schema_version is not the const "1.0", signalling producer/consumer
-# contract drift. Must be rejected so CI catches an analyzer emitting an
-# incompatible version against an older schema (the drift-detection mechanism).
-schema_version: "2.0" # BUG: const is "1.0"
+# INVALID: schema_version is not the const "1.1", signalling producer/consumer
+# contract drift. Must be rejected so CI catches an analyzer still emitting the
+# previous contract version (the drift-detection mechanism).
+schema_version: "1.0" # BUG: const is "1.1"
+graph_available: true
 project_summary:
   title: "Wrong Schema Version"
   abstract_summary: "Otherwise valid, but schema_version drifts from the contract."

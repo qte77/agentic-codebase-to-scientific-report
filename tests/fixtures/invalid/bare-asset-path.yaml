@@ -3,7 +3,8 @@
 # the schema's path pattern. This is the red->green TDD case: before the pattern
 # was added to the schema this instance wrongly validated. Everything else here is
 # valid, so rejection isolates the path constraint.
-schema_version: "1.0"
+schema_version: "1.1"
+graph_available: true
 project_summary:
   title: "Bare Asset Path"
   abstract_summary: "Otherwise valid, but an asset path omits the results/assets/ prefix."

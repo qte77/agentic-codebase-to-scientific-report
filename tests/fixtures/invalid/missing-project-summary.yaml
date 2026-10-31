@@ -2,7 +2,8 @@
 # Violates schema/analysis.schema.json by omitting the required `project_summary`
 # key. `make test` asserts this instance is REJECTED; if it ever validates, the
 # schema or harness has regressed.
-schema_version: "1.0"
+schema_version: "1.1"
+graph_available: true
 
 repository_structure:
   directory_tree: "src/, tests/, docs/"

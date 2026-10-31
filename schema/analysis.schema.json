@@ -7,6 +7,7 @@
   "additionalProperties": true,
   "required": [
     "schema_version",
+    "graph_available",
     "project_summary",
     "repository_structure",
     "architecture",
@@ -21,8 +22,12 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "const": "1.0",
+      "const": "1.1",
       "description": "Version of this contract. Bump when required keys change. Asserted by `make test` in CI to detect producer/consumer drift."
+    },
+    "graph_available": {
+      "type": "boolean",
+      "description": "Whether the Graphify knowledge graph (results/graph.json) existed when the analyzer ran. false = structural grounding came from the Repomix text bundle only (Graphify missing or SKIP_GRAPHIFY); section-synthesizer must then state this limitation in the report and validator must not expect graph-backed claims."
     },
     "project_summary": {
       "type": "object",
