@@ -64,7 +64,7 @@ pandoc_run:  ## Convert validated sections to PDF via pandoc/XeLaTeX (Phase 4)
 	$(PANDOC_SCRIPT) "$(WRITEUP_DIR)/*.md" "$(OUTPUT_PDF)" "$(WRITEUP_DIR)/00_title_abstract.tex" "" "" "" "en-US" "true" "$(WRITEUP_DIR)/references.bib" "$(CSL)" "true" "true" "true"
 	echo "PDF written to $(OUTPUT_PDF)."
 
-repo_ingest: create_struct  ## Ingest target repo via Repomix + Graphify (Phase 0)
+repo_ingest: create_struct check_target_branch  ## Ingest target repo via Repomix + Graphify (Phase 0)
 	echo "Ingesting target repo: $(TARGET_REPO) (branch $(TARGET_BRANCH)) ..."
 	npx --yes repomix@$(REPOMIX_VERSION) "$(TARGET_REPO)" --compress --output results/repo-context.xml
 	if [ -z "$(SKIP_GRAPHIFY)" ]; then
@@ -87,6 +87,14 @@ create_struct:  ## Setup directory structure
 clean_struct:  ## Clean directory structure
 	echo "Cleaning generated outputs..."
 	rm -rf results/
+
+.PHONY: check_target_branch test_target_branch
+check_target_branch:  ## Fail if the target clone is not on the configured branch (#36)
+	sh scripts/ingest/check-target-branch.sh "$(TARGET_REPO)" "$(TARGET_BRANCH)"
+
+test: test_target_branch
+test_target_branch:
+	sh scripts/test/test-check-target-branch.sh scripts/ingest/check-target-branch.sh
 
 
 # MARK:agents, LLMs
@@ -153,7 +161,7 @@ lint_md:  ## Lint Markdown with markdownlint-cli2 (rules: .markdownlint.jsonc)
 	npx --yes markdownlint-cli2 "**/*.md" "#node_modules" "#results" "#scripts/writeup/README.md"
 
 lint_sh:  ## Lint shell scripts with shellcheck (errors only)
-	shellcheck -S error scripts/writeup/*.sh scripts/test/*.sh
+	shellcheck -S error scripts/writeup/*.sh scripts/test/*.sh scripts/ingest/*.sh
 
 
 # MARK: Test

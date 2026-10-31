@@ -53,7 +53,9 @@ Branch: main
 2. Use full GitHub URLs for remote repositories
 3. Use relative paths (./path) for local repositories
 4. Include brief descriptions to help guide analysis focus
-5. Specify branch if not using default (main/master)
+5. Specify branch if not using default (main/master). `make repo_ingest` never
+   switches the clone's branch: it fails if the clone is not on `Branch:`
+   (`make check_target_branch` runs this check by itself)
 
 ## targets.md Configuration
 
