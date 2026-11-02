@@ -32,6 +32,11 @@ expect fail "configured main, clone on feat/x" "$TMP/repo" main
 expect pass "branch name with a slash" "$TMP/repo" feat/x
 mkdir "$TMP/plain"
 expect fail "target is not a git clone" "$TMP/plain" main
+# A plain subdirectory of a clone that IS on the configured branch: git resolves the
+# enclosing repo, so only a toplevel check rejects it (CI's checkout sits on main).
+git init -q -b main "$TMP/outer"
+mkdir "$TMP/outer/sub"
+expect fail "subdirectory of a clone on the configured branch" "$TMP/outer/sub" main
 expect fail "target does not exist" "$TMP/missing" main
 
 if [ "$rc" -ne 0 ]; then
