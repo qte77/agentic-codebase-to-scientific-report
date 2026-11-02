@@ -9,7 +9,10 @@ set -eu
 REPO=${1:?usage: check-target-branch.sh TARGET_REPO TARGET_BRANCH}
 BRANCH=${2:?missing TARGET_BRANCH (set Branch: in config/sources.md)}
 
-if ! git -C "$REPO" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+# Reason: git -C resolves an enclosing repo, so a plain subdirectory of some other
+# clone would pass a work-tree check; require REPO to be the clone's own toplevel.
+toplevel=$(git -C "$REPO" rev-parse --show-toplevel 2>/dev/null || true)
+if [ -z "$toplevel" ] || [ "$toplevel" != "$(cd "$REPO" && pwd -P)" ]; then
 	echo "error: target '$REPO' is not a git clone; cannot verify branch '$BRANCH'" >&2
 	exit 1
 fi
