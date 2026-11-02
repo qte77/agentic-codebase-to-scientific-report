@@ -65,6 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   last one (`.SHELLFLAGS := -ec`), with a fail-closed regression guard (#35).
 - `make repo_ingest` fails when the target clone is not on the `Branch:` named
   in `config/sources.md` instead of packing whatever is checked out (#36).
+- The target-branch guard rejects a plain subdirectory of another clone instead
+  of checking that clone's branch, which made `make test` fail on `main` CI.
 
 ### Security
 
