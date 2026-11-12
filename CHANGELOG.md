@@ -58,6 +58,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- CodeQL workflow: `github/codeql-action` was pinned to a CodeQL bundle release tag
+  (`codeql-bundle-v2.25.6`) instead of an action version; it is now pinned to `v4.39.3`
+  (`33d7b85`), the same pin the other qte77 repos use.
 - TODO-agent output paths aligned to `results/assets/` and
   `results/sections/references.bib`.
 - Stale Makefile target references in `scripts/writeup/README.md`.
