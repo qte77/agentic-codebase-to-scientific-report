@@ -98,7 +98,7 @@
     },
     "assets": {
       "type": "object",
-      "description": "Consumed by section-synthesizer (figure-embedding sections) and the asset-processor agent. All paths use the results/assets/ prefix (authoritative root).",
+      "description": "Consumed by section-synthesizer (figure-embedding sections). All paths use the results/assets/ prefix (authoritative root).",
       "required": ["images", "diagrams"],
       "additionalProperties": true,
       "properties": {
@@ -132,7 +132,7 @@
     },
     "citation_sources": {
       "type": "array",
-      "description": "Consumed by section-synthesizer (references.bib generation) and the bibliography-curator agent. Validator checks bibliography completeness.",
+      "description": "Consumed by section-synthesizer (references.bib generation). Validator checks bibliography completeness.",
       "items": {
         "type": "object",
         "required": ["title", "author", "year", "url", "accessed_date", "used_in_sections"],

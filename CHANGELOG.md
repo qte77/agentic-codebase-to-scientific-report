@@ -57,6 +57,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Empty CSL stubs (`apa.csl`, `chicago-author-date.csl`); CI actionlint step.
 - `mkdocs.yaml` — MkDocs site dropped; `docs/` stays GitHub-rendered (#23).
+- Unwired TODO agent specs (`.claude/agents/TODO/asset-processor.md`,
+  `bibliography-curator.md`): repo-analyzer and section-synthesizer already write
+  `results/assets/` and `references.bib`; the roadmap row is marked Dropped (#32).
 
 ### Fixed
 
